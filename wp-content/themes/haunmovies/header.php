@@ -22,6 +22,9 @@
     <?php else: ?>
         <style>#header .site-title {background: url(<?php echo HALIM_THEME_URI ?>/assets/images/halim-dark-logo.png) no-repeat top left;background-size: contain;text-indent: -9999px;}</style>
     <?php endif; ?>
+    <link rel="stylesheet" href="<?= get_stylesheet_directory_uri() ?>/assets/css/bootstrap-style.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+    <link rel="stylesheet" href="<?= get_stylesheet_directory_uri() ?>/assets/css/custom.css?v=<?= time() ?>"/>
 </head>
 <body <?php body_class('halimmovie-version-'.HALIMMOVIE_VERSION); ?> data-masonry="<?php echo cs_get_option('masonry_grid'); ?>" data-nonce="<?php echo wp_create_nonce(get_the_ID()); ?>">
 <?php
@@ -55,7 +58,7 @@
                             <form id="search-form-pc" name="halimForm" role="search" action="<?php echo esc_url(home_url('/')); ?>" method="GET">
                                 <div class="form-group">
                                     <div class="input-group col-xs-12">
-                                        <input id="search" type="text" name="s" value="<?php echo get_search_query(); ?>" class="form-control" data-toggle="tooltip" data-placement="bottom" data-original-title="<?php _e('Press Enter to search', 'halimthemes'); ?>" placeholder="<?php printf(  __( 'Search with %s movie...', 'halimthemes' ), $postCount ); ?>" autocomplete="off" required>
+                                        <input id="search" type="text" name="s" value="<?php echo get_search_query(); ?>" class="form-control" data-toggle="tooltip" data-placement="bottom" data-original-title="<?php _e('Press Enter to search', 'halimthemes'); ?>" placeholder="<?php printf(  __( 'Search...', 'halimthemes' ) ); ?>" autocomplete="off" required>
                                         <i class="animate-spin hl-spin4 hidden"></i>
                                     </div>
                                 </div>
@@ -64,16 +67,17 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 hidden-xs">
-                    <div id="get-bookmark" class="box-shadow"><i class="hl-bookmark"></i><span> <?php _e('Bookmarks', 'halimthemes'); ?></span><span class="count">0</span></div>
-                    <?php
-                        $enable_user_login_register = cs_get_option('enable_user_login_register');
-                        if($enable_user_login_register || is_user_logged_in()) HaLimCore::halim_userAccess();
-                    ?>
-                    <div id="bookmark-list" class="hidden bookmark-list-on-pc"><ul style="margin: 0;"></ul></div>
+                <div class="col-md-4">
+                    <div class="action-header">
+                        <a href="#"><i class="fa-solid fa-clock-rotate-left"></i></a>
+                        <a href="#"><i class="fa-solid fa-bookmark"></i></a>
+                        <a href="#"><i class="fa-solid fa-circle-user"></i></a>
+                        <a href="#"><i class="fa-solid fa-bell"></i></a>
+                    </div>
                 </div>
 
             </div>
+            <div class="notice-pc text-center mb-3">Lưu hoặc nhớ ngay link rút gọn <b><font color="#FFA500" style="font-size: 17px;">bit.ly/hh3d</font></b> để truy cập sẽ tự chuyển đến tên miền mới  khi nhà mạng chặn</div>
         </div>
     </header>
     <div class="navbar-container">
@@ -87,13 +91,13 @@
                         <span class="icon-bar"></span>
                     </button>
 
-                    <button type="button" class="navbar-toggle collapsed pull-right" data-toggle="collapse" data-target="#user-info" aria-expanded="false">
+                    <button type="button" class="navbar-toggle collapsed pull-right hidden-xs" data-toggle="collapse" data-target="#user-info" aria-expanded="false">
                         <span class="hl-dot-3 rotate" aria-hidden="true"></span>
                     </button>
                     <button type="button" class="navbar-toggle collapsed pull-right expand-search-form" data-toggle="collapse" data-target="#search-form" aria-expanded="false">
                         <span class="hl-search" aria-hidden="true"></span>
                     </button>
-                    <button type="button" class="navbar-toggle collapsed pull-right get-bookmark-on-mobile">
+                    <button type="button" class="navbar-toggle collapsed pull-right get-bookmark-on-mobile hidden-xs">
                         <i class="hl-bookmark" aria-hidden="true"></i>
                         <span class="count">0</span>
                     </button>
@@ -135,5 +139,3 @@
 </div>
 <div class="container">
     <div class="row container" id="wrapper">
-        <?php get_template_part('templates/search-filter'); ?>
-        <?php if(cs_get_option('alphabet_filter')) get_template_part('templates/letter.tpl'); ?>

@@ -223,20 +223,6 @@ $options[]    = array(
                 'media_buttons' => false,
               )
         ),
-
-        array(
-            'id'      => 'halim_showtime_movies',
-            'type'    => 'wysiwyg',
-            'title'   => __('Showtime movies', 'halimthemes'),
-            'settings' => array(
-                'textarea_rows' => 3,
-                'tinymce'       => true,
-                'media_buttons' => false,
-              )
-        ),
-
-
-
       ), // end: fields
     ), // end: a section
 
@@ -353,7 +339,34 @@ $options[]    = array(
   ),
 );
 
-
+$options[] = array(
+  'id'        => 'halim_showtime_movies',
+  'title'     => __('Showtime movies', 'halimthemes'),
+  'post_type' => 'post',
+  'context'   => 'normal',
+  'priority'  => 'default',
+  'sections'  => array(
+    array(
+      'fields' => array(
+        array(
+          'id'    => 'halim_showtime_movies',
+          'type'  => 'checkbox',
+          'title' => __('Showtime movies', 'halimthemes'),
+          'class' => 'horizontal',
+          'options' => array(
+            'mon' => 'Thứ Hai',
+            'tue' => 'Thứ Ba',
+            'wed' => 'Thứ Tư',
+            'thu' => 'Thứ Năm',
+            'fri' => 'Thứ Sáu',
+            'sat' => 'Thứ Bảy',
+            'sun' => 'Chủ Nhật',
+          ),
+        ),
+      )
+    )
+  )
+);
 
 
 CSFramework_Metabox::instance( $options );

@@ -1,10 +1,10 @@
 <?php get_header(); ?>
 
-	<div class="col-xs-12 carausel-sliderWidget">
+	<div class="col-xs-12 carausel-sliderWidget home-movie-slide">
 		<?php dynamic_sidebar('carousel-widget') ?>
 	</div>
 
-	<main id="main-contents" class="col-xs-12 col-sm-12 col-md-8">
+	<main id="main-contents" class="col-xs-12 col-sm-12">
 		<?php
 			if( is_active_sidebar( 'home-widget' ) ) {
 			     dynamic_sidebar( 'home-widget' );
@@ -13,4 +13,4 @@
 			} ?>
 	</main>
 
-<?php get_sidebar(); get_footer(); ?>
+<?php get_footer(); ?>

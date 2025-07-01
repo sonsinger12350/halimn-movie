@@ -38,7 +38,7 @@ class HaLim_Carousel_Slider_Widget extends WP_Widget {
 					<span class="hl-forward"></span> <?php _e('View all', 'halimthemes') ?></a>
 					</div>
 				<?php else : ?>
-				   <h3 class="section-title"><span><?php echo $title; ?></span></h3>
+				   <h3 class="section-title"><span><i class="fa-solid fa-fire-flame-curved"></i> <?php echo $title; ?></span></h3>
 				<?php endif ?>
 			</div>
 		<?php endif ?>
@@ -49,30 +49,84 @@ class HaLim_Carousel_Slider_Widget extends WP_Widget {
 						'posts_per_page' 	=> $postnum,
 						'post_status' 		=> 'publish',
 					);
-					if($type == 'featured')
-					{
+
+					if($type == 'featured') {
 						$args['tax_query'][] =  array(
 							'taxonomy'  => 'post_options',
 							'field'     => 'slug',
 							'terms'     => array('is_carousel_slide', 'featured')
 						);
-					} elseif($type == 'slidercat') {
+					} 
+					elseif ($type == 'slidercat') {
 						$args['cat'] = $categories;
 					}
-					if($rand == 1) {
-						$args['orderby'] = 'rand';
-					}
+
+					if ($rand == 1) $args['orderby'] = 'rand';
+
 					$wp_query = new WP_Query( $args );
+					$number = 1;
+
 					if ($wp_query->have_posts()) : while ($wp_query->have_posts()) : $wp_query->the_post();
-						HaLimCore::display_post_items('', true);
-					endwhile;
-					wp_reset_postdata();
+						global $post;
+
+						$meta = get_post_meta($post->ID, '_halim_metabox_options', true );
+						$post_title = $post->post_title;
+						$rate = get_post_meta($post->ID, "halim_user_rate", true);
+        				$count = get_post_meta($post->ID, "halim_users_num", true);
+						$rating = (!empty($rate) && !empty($count)) ? round($rate / $count, 2) : 0;
+					?>
+						<article class="thumb grid-item post-<?= $post->ID ?>">
+							<div class="halim-item">
+								<a class="halim-thumb" href="<?= $post->guid ?>" title="<?= $post_title ?>">
+									<figure class="<?= $number % 2 == 0 ? 'clip-path-even' : 'clip-path-odd' ?>">
+										<img class="lazyload blur-up img-responsive" data-sizes="auto" data-src="<?= $meta['halim_thumb_url'] ?>" alt="<?= $post_title ?>" title="<?= $post_title ?>">
+										<span class="episode"><?= $rating ?></span>
+									</figure>
+									<div class="halim-post-title-box">
+										<div class="number"><?= $number ?></div>
+										<div class="halim-post-title ">
+											<h2 class="entry-title"><?= $post_title ?></h2>
+											<p class="original_title"><?= $meta['halim_original_title'] ?></p>
+										</div>
+									</div>
+								</a>
+							</div>
+						</article>
+					<?php 
+						$number++;
+						endwhile;
+						wp_reset_postdata();
 				endif; ?>
 			</div>
 			<script>
 				jQuery(document).ready(function($) {
-				var owl = $('#<?php echo $widget_id; ?>');
-				owl.owlCarousel({rtl:<?php echo is_rtl()?"true":"false"; ?>,loop: true,margin: 4,autoplay: true,autoplayTimeout: 4000,autoplayHoverPause: true,nav: false,navText: ['<i class="hl-down-open rotate-left"></i>', '<i class="hl-down-open rotate-right"></i>'],responsiveClass: true,responsive: {0: {items:2},480: {items:3}, 600: {items:4},1000: {items: <?php echo $item ?>}}})});
+					var owl = $('#<?php echo $widget_id; ?>');
+					owl.owlCarousel({
+						rtl: <?php echo is_rtl() ? "true" : "false"; ?> ,
+						loop : false,
+						margin: 16,
+						autoplay: false,
+						autoplayTimeout: 4000,
+						autoplayHoverPause: true,
+						nav: false,
+						navText: ['<i class="hl-down-open rotate-left"></i>', '<i class="hl-down-open rotate-right"></i>'],
+						responsiveClass: true,
+						responsive: {
+							0: {
+								items: 2
+							},
+							576: {
+								items: 3
+							},
+							767: {
+								items: 4
+							},
+							1199: {
+								items: 5
+							}
+						}
+					})
+				});
 			</script>
 		</div>
 		<?php

@@ -148,4 +148,29 @@ function halim_footer_copyright($html = "")
     return apply_filters("halim_copyright_text", $text);
 }
 
+add_action('wp_ajax_halim_get_showtime', 'handle_halim_get_showtime');
+add_action('wp_ajax_nopriv_halim_get_showtime', 'handle_halim_get_showtime');
+function handle_halim_get_showtime() {
+    $showtime = isset($_GET["showtime"]) ? sanitize_text_field($_GET["showtime"]) : "";
+
+    $args = array(
+        'post_type' => 'post',
+        'post_status' => 'publish',
+        'meta_query'     => array(
+            array(
+                'key'     => 'halim_showtime_movies',
+                'value'   => $showtime,
+                'compare' => 'LIKE',
+            ),
+        ),
+    );
+    $query = new WP_Query( $args );
+
+    $content = '';
+    if ($query->have_posts()) : while ($query->have_posts()) : $query->the_post();
+        $content .= HaLimCore::display_post_items();
+    endwhile; wp_reset_postdata(); endif;
+
+    exit;
+}
 ?>

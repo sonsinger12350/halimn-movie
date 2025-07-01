@@ -61,5 +61,6 @@
 
 <div id='easy-top'></div>
 <?php wp_footer(); if (cs_get_option('footer_code')) echo cs_get_option('footer_code')."\n"; ?>
+<script src="<?= get_stylesheet_directory_uri() ?>/assets/js/custom.js?v=<?= time() ?>"></script>
 </body>
 </html>

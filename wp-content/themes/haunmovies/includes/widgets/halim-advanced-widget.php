@@ -15,13 +15,53 @@ class HaLim_Advanced_Widget extends WP_Widget {
 
 
 	public function widget( $args, $instance ) {
-
+		$showtime = [
+			'mới' => 'Cập nhật',
+			'mon' => 'Thứ Hai',
+			'tue' => 'Thứ Ba',
+			'wed' => 'Thứ Tư',
+			'thu' => 'Thứ Năm',
+			'fri' => 'Thứ Sáu',
+			'sat' => 'Thứ Bảy',
+			'sun' => 'Chủ Nhật',
+		];
 		extract($args);
 		extract($instance);
 		echo $before_widget;
 		ob_start();
 		?>
 		<section id="<?php echo $widget_id; ?>">
+			<div class="showtime desktop">
+				<?php foreach($showtime as $k => $v): ?>
+					<?php if ($k == 'mới'): ?>
+						<a class="item active" href="/">
+							<p><?= $k ?></br><?= $v ?></p>
+						</a>
+					<?php else: ?>
+						<a class="item" href="javascript:void(0)" data-tab="<?= $k ?>">
+							<p><b><?= $k ?></b></br><?= $v ?></p>
+						</a>
+					<?php endif ?>
+				<?php endforeach ?>
+			</div>
+			<div class="mobile">
+				<div class="showtime-tabs">
+					<div class="tabs">
+						<a href="/" class="active">Mới cập nhật</a>
+						<a href="#collapseShowtime" data-toggle="collapse" class="active">Lịch chiếu</a>
+					</div>
+				</div>
+				<div class="collapse mt-2" id="collapseShowtime">
+					<div class="showtime">
+						<?php foreach($showtime as $k => $v): ?>
+							<?php if ($k == 'mới') continue; ?>
+							<a class="item" href="javascript:void(0)" data-tab="<?= $k ?>">
+								<p><?= $v ?></p>
+							</a>
+						<?php endforeach ?>
+					</div>
+				</div>
+			</div>
 			<h4 class="section-heading">
 		   		<a href="<?php echo ($categories == 'all') ? $url : get_category_link($categories);  ?>" title="<?php echo $title; ?>">
 		   			<span class="h-text"><?php echo $title; ?></span>
@@ -42,10 +82,12 @@ class HaLim_Advanced_Widget extends WP_Widget {
 			</h4>
 			<div id="<?php echo $args['widget_id']; ?>-ajax-box" class="halim_box">
 			<?php
+				$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 				$args = array(
 					'post_type' => 'post',
 					'post_status' => 'publish',
 					'posts_per_page' => $postnum,
+					'paged' => $paged
 				);
 
 				if($type == 'popular'){
@@ -109,12 +151,14 @@ class HaLim_Advanced_Widget extends WP_Widget {
 				$query = new WP_Query( $args );
 				if ($query->have_posts()) : while ($query->have_posts()) : $query->the_post();
 					HaLimCore::display_post_items($layout);
-				endwhile; wp_reset_postdata(); endif;
-				echo '<div class="clearfix"></div>';
-				printf( '<a href="%s" class="see-more">' . __( 'View all post »', 'halimthemes' ) . '</a>', ($categories == 'all') ? $url : get_category_link($categories));
+				endwhile; wp_reset_postdata();
+				endif;
 			?>
 
 			</div>
+			<?php
+				echo halim_pagination();
+			?>
 		</section>
 		<div class="clearfix"></div>
 		<?php
