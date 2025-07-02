@@ -26,10 +26,11 @@
 	$countRate = get_post_meta($post->ID, "halim_users_num", true);
 	$rating = (!empty($rate) && !empty($countRate)) ? round($rate / $countRate, 2) : 0;
 	$categories = get_the_category();
-	$showtime = get_post_meta($post->ID, 'halim_showtime_movies', true );
-	$showtime_text = '';
 	$list_movie_follow = list_movie_follow();
 	$watch_url = cs_get_option('watch_btn_display') == 'first_episode' ? halim_get_first_episode_link($post->ID) : halim_get_last_episode_link($post->ID);
+
+	$showtime = get_post_meta($post->ID, 'halim_showtime_movies', true );
+	$showtime_text = '';
 
 	if (!empty($showtime['halim_showtime_movies'])) {
 		$list_showtime = list_showtime();
@@ -256,7 +257,7 @@
 
 		$('body').on("click", "#submitRatingBtn", function() {
 			let selectedOption = $('.movie-rating-rating-option.selected');
-			let totalVote = $('.total-vote').text();
+			let totalVote = $('.total-vote').html();
 
 			if (selectedOption.length === 0) {
 				createToast({

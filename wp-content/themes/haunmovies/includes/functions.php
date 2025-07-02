@@ -51,9 +51,7 @@ if (!function_exists("halim_player_box")) {
             }
             echo "            </div>\r\n\r\n            <div class=\"clearfix\"></div>\r\n\r\n            <div class=\"button-watch ";
             echo $_obfuscated_0D271C2609252138122D283C21240D03023606230E3301_;
-            echo "\">\r\n                <ul class=\"halim-social-plugin col-xs-4 hidden-xs\">\r\n                    <li class=\"fb-like\" data-href=\"";
-            the_permalink();
-            echo "/\" data-layout=\"button_count\" data-action=\"like\" data-size=\"small\" data-show-faces=\"true\" data-share=\"true\"></li>\r\n                </ul>\r\n\r\n                <div class=\"col-xs-12 col-md-8\">\r\n\r\n                    ";
+            echo "\">\r\n                <ul class=\"halim-social-plugin col-xs-4 hidden-xs\">\r\n\r\n</ul>\r\n\r\n<div class=\"col-xs-12 col-md-8\">\r\n\r\n                    ";
             do_action("halim_before_single_watch_button", $post->ID);
             echo "                    ";
             if (cs_get_option("enable_next_prev_episode_button")) {
