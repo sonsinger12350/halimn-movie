@@ -173,4 +173,40 @@ function handle_halim_get_showtime() {
 
     exit;
 }
+
+add_action('wp_ajax_halim_follow_movie', 'handle_halim_follow_movie');
+add_action('wp_ajax_nopriv_halim_follow_movie', 'handle_halim_follow_movie');
+
+function handle_halim_follow_movie() {
+    $post_id = isset($_POST["post_id"]) ? absint($_POST["post_id"]) : 0;
+    $user_id = get_current_user_id();
+
+    if ($post_id && $user_id) {
+        $followed_movies = get_user_meta($user_id, 'halim_followed_movies', true);
+        if (!is_array($followed_movies)) {
+            $followed_movies = [];
+        }
+
+        if (!in_array($post_id, $followed_movies)) {
+            // Follow
+            $followed_movies[] = $post_id;
+            update_user_meta($user_id, 'halim_followed_movies', $followed_movies);
+            wp_send_json_success([
+                'message' => 'Movie followed successfully!',
+                'action' => 'follow'
+            ]);
+        } else {
+            // Unfollow
+            $followed_movies = array_diff($followed_movies, [$post_id]);
+            update_user_meta($user_id, 'halim_followed_movies', $followed_movies);
+            wp_send_json_success([
+                'message' => 'Movie unfollowed successfully!',
+                'action' => 'unfollow'
+            ]);
+        }
+    } else {
+        wp_send_json_error(['message' => 'Invalid post ID or user not logged in.']);
+    }
+}
+
 ?>

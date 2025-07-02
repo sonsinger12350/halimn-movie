@@ -70,7 +70,7 @@
                 <div class="col-md-4">
                     <div class="action-header">
                         <a href="#"><i class="fa-solid fa-clock-rotate-left"></i></a>
-                        <a href="#"><i class="fa-solid fa-bookmark"></i></a>
+                        <a href="/tu-phim-theo-doi"><i class="fa-solid fa-bookmark"></i></a>
                         <a href="#"><i class="fa-solid fa-circle-user"></i></a>
                         <a href="#"><i class="fa-solid fa-bell"></i></a>
                     </div>

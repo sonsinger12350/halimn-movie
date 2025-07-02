@@ -15,16 +15,7 @@ class HaLim_Advanced_Widget extends WP_Widget {
 
 
 	public function widget( $args, $instance ) {
-		$showtime = [
-			'mới' => 'Cập nhật',
-			'mon' => 'Thứ Hai',
-			'tue' => 'Thứ Ba',
-			'wed' => 'Thứ Tư',
-			'thu' => 'Thứ Năm',
-			'fri' => 'Thứ Sáu',
-			'sat' => 'Thứ Bảy',
-			'sun' => 'Chủ Nhật',
-		];
+		$showtime = list_showtime();
 		extract($args);
 		extract($instance);
 		echo $before_widget;

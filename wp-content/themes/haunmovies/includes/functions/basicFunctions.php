@@ -372,4 +372,25 @@ function halim_user_id_exists($user = 1)
     return $count == 1 ? true : false;
 }
 
+function list_showtime() {
+    return [
+        'mới' => 'Cập nhật',
+        'mon' => 'Thứ Hai',
+        'tue' => 'Thứ Ba',
+        'wed' => 'Thứ Tư',
+        'thu' => 'Thứ Năm',
+        'fri' => 'Thứ Sáu',
+        'sat' => 'Thứ Bảy',
+        'sun' => 'Chủ Nhật',
+    ];
+}
+
+function list_movie_follow() {
+    $user_id = get_current_user_id();
+    if (empty($user_id)) return [];
+
+    $followed_movies = get_user_meta($user_id, 'halim_followed_movies', true);
+    return $followed_movies;
+}
+
 ?>

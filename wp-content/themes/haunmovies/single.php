@@ -98,10 +98,11 @@
         <div class="clearfix wrap-content">
 	        <script>var halim_cfg = <?php echo json_encode($config, JSON_UNESCAPED_UNICODE); ?></script>
         	<?php
-	            if($single_tpl !== NULL) {
+	            if ($single_tpl !== NULL) {
 	            	$layout_dir = $single_tpl == 'template-1' ? 'single-layout-1' : 'single-layout-2';
 	            	($halim_action) ? get_template_part('templates/'.$layout_dir.'/single.watch') : get_template_part('templates/'.$layout_dir.'/single.info');
-	            } else {
+	            }
+				else {
 	            	get_template_part('templates/single.full');
 	            }
             ?>

@@ -30,6 +30,14 @@
     --gradient-item: linear-gradient(135deg, #1e1e1e, #252525);
     --shimmer-speed: 3s;
     --transition-speed: 0.4s;
+    --dark: #1a1a1a;
+    --light: #1a1a1a;
+    --text: hsla(0,0%,100%,.9);
+    --success: #0abf30;
+    --error: #e24d4c;
+    --warning: #e9bd0c;
+    --info: #3498db;
+    --random: #eb43ff
 }
 
 @keyframes shimmer {
@@ -74,6 +82,81 @@
     }
     100% {
         box-shadow: 0 0 0 0 #fff0;
+    }
+}
+
+@keyframes bounceInDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-100px)
+    }
+
+    60% {
+        opacity: 1;
+        transform: translateY(10px)
+    }
+
+    75% {
+        transform: translateY(-5px)
+    }
+
+    90% {
+        transform: translateY(2px)
+    }
+
+    to {
+        transform: translateY(0)
+    }
+}
+
+@keyframes bounceOutUp {
+    20% {
+        transform: translateY(5px)
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-100px)
+    }
+}
+
+@keyframes bounceInRight {
+    0%,60%,75%,90%,to {
+        animation-timing-function: cubic-bezier(.215,.61,.355,1)
+    }
+
+    0% {
+        opacity: 0;
+        transform: translate3d(3000px,0,0)
+    }
+
+    60% {
+        opacity: 1;
+        transform: translate3d(-25px,0,0)
+    }
+
+    75% {
+        transform: translate3d(10px,0,0)
+    }
+
+    90% {
+        transform: translate3d(-5px,0,0)
+    }
+
+    to {
+        transform: translate3d(-10px,0,0)
+    }
+}
+
+@keyframes bounceOutRight {
+    20% {
+        opacity: 1;
+        transform: translate3d(-20px,0,0)
+    }
+
+    to {
+        opacity: 0;
+        transform: translate3d(2000px,0,0)
     }
 }
 
@@ -443,3 +526,143 @@ body *:not(i) {
     }
 }
 /* End of Advanced Widget 2 */
+
+/* Notification */
+.notifications {
+    left: 50%;
+    position: fixed;
+    top: 10px;
+    transform: translateX(-50%);
+    width: auto;
+    z-index: 999999
+}
+
+.notifications.bottom-right {
+    bottom: 30px;
+    left: auto;
+    right: 0;
+    top: auto;
+    transform: none;
+    z-index: 999999
+}
+
+.notifications :where(.toast,.column) {
+    align-items: center;
+    display: flex
+}
+
+.notifications .toast {
+    animation: bounceInDown .5s cubic-bezier(.215,.61,.355,1) forwards;
+    backdrop-filter: blur(15px);
+    background: var(--light);
+    border: 1px solid hsla(0,0%,100%,.1);
+    border-radius: 4px;
+    color: var(--text);
+    cursor: pointer;
+    font-family: sans-serif;
+    justify-content: space-between;
+    list-style: none;
+    margin-bottom: 10px;
+    overflow: hidden;
+    padding: 16px 17px;
+    position: relative;
+    width: 320px
+}
+
+.notifications.bottom-right .toast {
+    animation: bounceInRight .5s cubic-bezier(.215,.61,.355,1) forwards
+}
+
+.notifications .toast.hide {
+    animation: bounceOutUp .5s cubic-bezier(.215,.61,.355,1) forwards
+}
+
+.notifications.bottom-right .toast.hide {
+    animation: bounceOutRight .5s cubic-bezier(.215,.61,.355,1) forwards
+}
+
+.toast:before {
+    bottom: 0;
+    content: "";
+    height: 3px;
+    left: 0;
+    position: absolute;
+    transition: width .1s linear;
+    width: var(--progress-width)
+}
+
+.toast.success:before {
+    background: var(--success)
+}
+
+.toast.error:before {
+    background: var(--error)
+}
+
+.toast.warning:before {
+    background: var(--warning)
+}
+
+.toast.info:before {
+    background: var(--info)
+}
+
+.toast.random:before {
+    background: var(--random)
+}
+
+.toast .column i {
+    font-size: 1.75rem
+}
+
+.toast.success .column i {
+    color: var(--success)
+}
+
+.toast.error .column i {
+    color: var(--error)
+}
+
+.toast.warning .column i {
+    color: var(--warning)
+}
+
+.toast.info .column i {
+    color: var(--info)
+}
+
+.toast.random .column i {
+    color: var(--random)
+}
+
+.toast .column span {
+    font-size: 14px;
+    margin-left: 12px
+}
+
+.toast i:last-child {
+    color: hsla(0,0%,100%,.6);
+    cursor: pointer
+}
+
+.toast i:last-child:hover {
+    color: var(--text)
+}
+
+@media screen and (max-width: 530px) {
+    .notifications .toast {
+        font-size: 1rem;
+        margin-left: 0;
+        margin-right: 0;
+        width: 100%
+    }
+
+    .notifications:not(.bottom-right) .toast {
+        animation: bounceInDown .5s cubic-bezier(.215,.61,.355,1) forwards
+    }
+
+    .notifications:not(.bottom-right) .toast.hide {
+        animation: bounceOutUp .5s cubic-bezier(.215,.61,.355,1) forwards
+    }
+}
+/* End Of Notification */

@@ -5,15 +5,7 @@
 	*/
 	get_header();
 
-	$showtime = [
-		'sun' => 'Chủ Nhật',
-		'mon' => 'Thứ Hai',
-		'tue' => 'Thứ Ba',
-		'wed' => 'Thứ Tư',
-		'thu' => 'Thứ Năm',
-		'fri' => 'Thứ Sáu',
-		'sat' => 'Thứ Bảy',
-	];
+	$showtime = list_showtime();
 	$day = isset($_GET['day']) ? $_GET['day'] : 'sun';
 ?>
 <style>

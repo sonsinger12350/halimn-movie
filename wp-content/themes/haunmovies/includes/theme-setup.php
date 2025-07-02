@@ -118,13 +118,27 @@ function halim_enqueue_scripts()
     wp_enqueue_script("bootstrap", HALIM_THEME_URI . "/assets/js/bootstrap.min.js", [], "", true);
     wp_enqueue_script("carousel", HALIM_THEME_URI . "/assets/js/owl.carousel.min.js", [], "", true);
     wp_enqueue_script("halim-init", HALIM_THEME_URI . "/assets/js/core.min.js", [], $themeinfo->get("Version"), true);
-    wp_localize_script("halim-init", "halim", ["ajax_url" => HALIM_THEME_URI . "/halim-ajax.php", "light_mode" => cs_get_option("halim_light_mode") ? 1 : 0, "light_mode_btn" => cs_get_option("halim_light_mode_switch_btn") ? 1 : 0, "ajax_live_search" => cs_get_option("enable_live_search"), "sync" => cs_get_option("halim_disable_debug"), "db_redirect_url" => cs_get_option("haim_debug_redirect_url") ?: "https://halimthemes.com"]);
+    wp_localize_script("halim-init", "halim", [
+        "ajax_url" => HALIM_THEME_URI . "/halim-ajax.php", 
+        "light_mode" => cs_get_option("halim_light_mode") ? 1 : 0, 
+        "light_mode_btn" => cs_get_option("halim_light_mode_switch_btn") ? 1 : 0, 
+        "ajax_live_search" => cs_get_option("enable_live_search"), 
+        "sync" => cs_get_option("halim_disable_debug"), 
+        "db_redirect_url" => cs_get_option("haim_debug_redirect_url") ?: "https://halimthemes.com",
+        'is_logged_in' => is_user_logged_in(),
+    ]);
     if (is_single()) {
         wp_localize_script("halim-init", "ajax_var", ["url" => HALIM_THEME_URI . "/halim-ajax.php", "nonce" => wp_create_nonce("ajax-nonce")]);
-        wp_localize_script("halim-init", "halim_rate", ["ajaxurl" => HALIM_THEME_URI . "/halim-ajax.php", "nonce" => wp_create_nonce("halim_rate_nonce"), "your_rating" => __("Thank you for rating!", "halimthemes")]);
+        wp_localize_script("halim-init", "halim_rate", [
+            "ajaxurl" => HALIM_THEME_URI . "/halim-ajax.php", 
+            "nonce" => wp_create_nonce("halim_rate_nonce"), 
+            "your_rating" => __("Thank you for rating!", "halimthemes"),
+        ]);
     }
     wp_enqueue_script("ajax-auth-script", HALIM_THEME_URI . "/assets/js/ajax-auth-script.min.js", [], $themeinfo->get("Version"), true);
     wp_localize_script("ajax-auth-script", "ajax_auth_object", ["ajaxurl" => HALIM_THEME_URI . "/halim-ajax.php", "redirecturl" => home_url(), "loadingmessage" => __("Sending user info, please wait...", "halimthemes"), "sitekey" => cs_get_option("recaptcha_site_key"), "languages" => ["login" => __("Login", "halimthemes"), "register" => __("Register", "halimthemes"), "forgotpassword" => __("Lost your password?", "halimthemes"), "already_account" => __("Already have an account?", "halimthemes"), "create_account" => __("Create account", "halimthemes"), "reset_captcha" => __("Reset captcha", "halimthemes"), "username" => __("Username", "halimthemes"), "email" => __("Email", "halimthemes"), "username_email" => __("Username or Email", "halimthemes"), "password" => __("Password", "halimthemes"), "reset_password" => __("Reset Password", "halimthemes"), "login_with" => __("Login with", "halimthemes"), "register_with" => __("Register with", "halimthemes"), "or" => __("or", "halimthemes")]]);
+    wp_enqueue_script('toast-js', HALIM_THEME_URI . '/assets/js/toast.min.js', [], '1.1', true);
+    wp_enqueue_script('halim-custom', HALIM_THEME_URI . '/assets/js/custom.js', [], time(), true);
 }
 function halim_add_fb_scripts()
 {
