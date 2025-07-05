@@ -393,4 +393,50 @@ function list_movie_follow() {
     return $followed_movies;
 }
 
+function getDateDiff($datetime) {
+    $text = "";
+
+    if (empty($datetime)) return $text;
+
+    $search  = ["[number]", "[time_unit]", "[adjective]"];
+    $replace = [];
+    $now     = new DateTime(gmdate('Y-m-d H:i:s'));
+    $ago     = new DateTime($datetime);
+    $diff    = $now->diff($ago);
+
+    if ($diff->y) {
+        $replace[] = $diff->y;
+        $replace[] = 'năm';
+    }
+    else if ($diff->m) {
+        $replace[] = $diff->m;
+        $replace[] = 'tháng';
+    }
+    else if ($diff->d) {
+        $replace[] = $diff->d;
+        $replace[] = 'ngày';
+    }
+    else if ($diff->h) {
+        $replace[] = $diff->h;
+        $replace[] = 'giờ';
+    }
+    else if ($diff->i) {
+        $replace[] = $diff->i;
+        $replace[] = 'phút';
+    }
+    else if ($diff->s) {
+        $replace[] = $diff->s;
+        $replace[] = 'giây';
+    }
+
+    if ($replace) {
+        $replace[] = esc_html('trước');
+        $text      = str_replace($search, $replace, '[number] [time_unit] [adjective]');
+    }
+    else {
+        $text = esc_html('vừa xong');
+    }
+
+    return $text;
+}
 ?>

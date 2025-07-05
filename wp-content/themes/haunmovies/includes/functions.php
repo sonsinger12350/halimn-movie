@@ -1136,4 +1136,10 @@ function getListEpisodeServers($post_id, $data)
     }
 }
 
+add_filter('show_admin_bar', function($show) {
+    if (!current_user_can('administrator')) {
+        return false;
+    }
+    return $show;
+});
 ?>

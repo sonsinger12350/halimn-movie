@@ -396,7 +396,8 @@
     margin-right: 5px;
     padding: 6px 10px;
     cursor: pointer;
-    color: #fff
+    color: #fff;
+    border: 0px;
 }
 
 .button-default i {

@@ -26,21 +26,63 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
     <link rel="stylesheet" href="<?= get_stylesheet_directory_uri() ?>/assets/css/custom.css?v=<?= time() ?>"/>
 </head>
-<body <?php body_class('halimmovie-version-'.HALIMMOVIE_VERSION); ?> data-masonry="<?php echo cs_get_option('masonry_grid'); ?>" data-nonce="<?php echo wp_create_nonce(get_the_ID()); ?>">
 <?php
-    if ( function_exists( 'wp_body_open' ) ) {
-        wp_body_open();
-    } else {
-        do_action( 'wp_body_open' );
-    }
-    $postCount = __('Search', 'halimthemes');
-    if(cs_get_option('show_total_post_in_search_form')) {
-        $count_posts = wp_count_posts();
-        if ( $count_posts ) {
-            $postCount = number_format($count_posts->publish);
-        }
-    }
+    global $post;
+
+    $current_user = is_user_logged_in() ? wp_get_current_user() : null;
+    $wp_nonce = wp_create_nonce(get_the_ID());
 ?>
+<body <?php body_class('halimmovie-version-'.HALIMMOVIE_VERSION); ?> data-masonry="<?php echo cs_get_option('masonry_grid'); ?>" data-nonce="<?php echo $wp_nonce; ?>">
+    <?php
+        if ( function_exists( 'wp_body_open' ) ) {
+            wp_body_open();
+        } else {
+            do_action( 'wp_body_open' );
+        }
+        $postCount = __('Search', 'halimthemes');
+        if(cs_get_option('show_total_post_in_search_form')) {
+            $count_posts = wp_count_posts();
+            if ( $count_posts ) {
+                $postCount = number_format($count_posts->publish);
+            }
+        }
+    ?>
+    <div id="custom-login-modal" class="custom-login">
+        <div class="custom-login-content">
+            <span id="custom-close-login-modal" class="custom-close" onclick="jQuery('#custom-login-modal').removeClass('active')">×</span>
+            <h2 class="custom-login-title">Đăng nhập</h2>
+            <div class="wpd-social-login-buttons">
+            <?php do_action('wpdiscuz_social_login_buttons'); ?>
+            </div>
+            <a id="custom-google-login" class="google-login-button" href="https://hswebfreelancer.info/wp-login.php?loginSocial=google" data-plugin="nsl" data-action="connect" data-redirect="current" data-provider="google" data-popupwidth="600" data-popupheight="600">
+                <span class="google-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="LgbsSe-Bz112c" width="20px" height="20px">
+                        <g>
+                            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
+                            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
+                            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
+                            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
+                            <path fill="none" d="M0 0h48v48H0z"></path>
+                        </g>
+                    </svg>
+                </span> Đăng nhập bằng Google
+            </a>
+            <!-- <form id="custom-login-form" class="custom-login-form">
+                <input type="text" id="custom-username" name="username" class="custom-input" placeholder="Tên tài khoản" required="">
+                <input type="password" id="custom-password" name="password" class="custom-input" placeholder="Mật khẩu" required="">
+                <label for="custom-remember" class="custom-checkbox-label">
+                    <input type="checkbox" id="custom-remember" name="remember" class="custom-checkbox"> Ghi nhớ </label>
+                <div class="cf-turnstile" data-sitekey="0x4AAAAAABOYJ50RwHQ4oKMP" data-theme="dark" data-language="vi" data-callback="cfTurnstileCallback" data-error-callback="cfErrorCallback" data-timeout-callback="cfTimeoutCallback">
+                    <div>
+                        <input type="hidden" name="cf-turnstile-response" id="cf-chl-widget-4wd3p_response" value="0.kRIx7ypx_FFkjqv5cdHzgedoCoPhjMApr4DgrbQe9Hmfjxs2rFCCJcK0xmblbxh3HQqDrZFO6o8hdWH3mhqNGNaok5R2IW1w5klAaKCijY3Ggb8KbyFMWWhJVJQU-roWdHE58UAw6IYkA0HYCLga7TnHyy8O5T6oYRdGQP5zwirODgC_Iy-nckCBf49dkKqfX6Gh8GAjoERHqtGOYx3y_dePZyVApgE6z4kS--xsxU6hYIcZzzXU4ULFXw4axNvrqIvRaWUlB4A6exEpSl889RIHnF6lgFY05RyDWeKBmQnqPc0xLyZnjGZV6m3QidW4Fuc8qsN6MGeItOZWPyMxECkIic58Myms5PDOvECRbsoSavzIRWaIGpxETwQ_CN4RJJz_Qb5_5STgEBgwZF6RBeWISTITeIXxXjzFXZEz4oAKYos19v2DmT_o8GEQJjJXWbhI2P43f_abmzyoZuG0C7TIxnsF5fUGvputk87mdxfSNkokxHBBYTZ49Ic6pNU_1QAFVdjK_O8DFqf26hQhOeqx6McEPSTVIyRgL7JXfI5IQeJHbnjGU4K8qoBQQVSZo4nXJxPFZb5RzcZTv8lZMXR-zXPX-NVimv1__lOURL7vFqM37m-31cLZEOGWGVoKq9S7yWoVI9nyNSGMzxPcqa0hQLlVi67ycjBlAudB0LavoUy8ZgYd_jqDBj93PVL7_RmtSZdlv35DxtpxKvOvIF8-DuPq9X4x4AtdnXN-G8H4mF8ZRi9Xpg5HPxudUo052jZBZ-DjTbs6rg-9jldB3LysQKmi4HdePlVUPf2fz7nWi-Sd90d3YYbJ2HzqjRkzYEbjNISyiDRHvqJpDpVjwDfvuTHCkDr3KhMPUqdnSp5F-5aD4hxGegAI7GLMLGCQLEBZPCVexam7TE3MP3AIdvxAZi2nmUczzzSPbbY21oo.qEsKbTyeogEHcjp6kuj8Mg.02924befb98708e008e153b7d4134d9231629d47daafd35e7e989f5c4cccf799">
+                    </div>
+                </div>
+                <input type="hidden" id="cf-turnstile-response" name="cf_turnstile_response" value="0.kRIx7ypx_FFkjqv5cdHzgedoCoPhjMApr4DgrbQe9Hmfjxs2rFCCJcK0xmblbxh3HQqDrZFO6o8hdWH3mhqNGNaok5R2IW1w5klAaKCijY3Ggb8KbyFMWWhJVJQU-roWdHE58UAw6IYkA0HYCLga7TnHyy8O5T6oYRdGQP5zwirODgC_Iy-nckCBf49dkKqfX6Gh8GAjoERHqtGOYx3y_dePZyVApgE6z4kS--xsxU6hYIcZzzXU4ULFXw4axNvrqIvRaWUlB4A6exEpSl889RIHnF6lgFY05RyDWeKBmQnqPc0xLyZnjGZV6m3QidW4Fuc8qsN6MGeItOZWPyMxECkIic58Myms5PDOvECRbsoSavzIRWaIGpxETwQ_CN4RJJz_Qb5_5STgEBgwZF6RBeWISTITeIXxXjzFXZEz4oAKYos19v2DmT_o8GEQJjJXWbhI2P43f_abmzyoZuG0C7TIxnsF5fUGvputk87mdxfSNkokxHBBYTZ49Ic6pNU_1QAFVdjK_O8DFqf26hQhOeqx6McEPSTVIyRgL7JXfI5IQeJHbnjGU4K8qoBQQVSZo4nXJxPFZb5RzcZTv8lZMXR-zXPX-NVimv1__lOURL7vFqM37m-31cLZEOGWGVoKq9S7yWoVI9nyNSGMzxPcqa0hQLlVi67ycjBlAudB0LavoUy8ZgYd_jqDBj93PVL7_RmtSZdlv35DxtpxKvOvIF8-DuPq9X4x4AtdnXN-G8H4mF8ZRi9Xpg5HPxudUo052jZBZ-DjTbs6rg-9jldB3LysQKmi4HdePlVUPf2fz7nWi-Sd90d3YYbJ2HzqjRkzYEbjNISyiDRHvqJpDpVjwDfvuTHCkDr3KhMPUqdnSp5F-5aD4hxGegAI7GLMLGCQLEBZPCVexam7TE3MP3AIdvxAZi2nmUczzzSPbbY21oo.qEsKbTyeogEHcjp6kuj8Mg.02924befb98708e008e153b7d4134d9231629d47daafd35e7e989f5c4cccf799">
+                <button type="submit" id="custom-login-submit" class="custom-submit active">Đăng nhập</button>
+                <div id="custom-login-message" class="custom-message"></div>
+            </form> -->
+        </div>
+    </div>
     <header id="header">
         <div class="container">
             <div class="row" id="headwrap">
@@ -67,13 +109,44 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div id="navdrop" class="col-md-4">
                     <div class="action-header">
-                        <a href="#"><i class="fa-solid fa-clock-rotate-left"></i></a>
-                        <a href="/tu-phim-theo-doi"><i class="fa-solid fa-bookmark"></i></a>
-                        <a href="#"><i class="fa-solid fa-circle-user"></i></a>
-                        <a href="#"><i class="fa-solid fa-bell"></i></a>
+                        <?php if (is_user_logged_in()): ?>
+                            <a href="/lich-su-xem-phim"><i class="fa-solid fa-clock-rotate-left"></i></a>
+                            <a href="/tu-phim-theo-doi"><i class="fa-solid fa-bookmark"></i></a>
+                            <a href="javascript:void(0)" class="open-profile-info"><i class="fa-solid fa-circle-user"></i></a>
+                        <?php else: ?>
+                            <a href="/lich-su-xem-phim"><i class="fa-solid fa-clock-rotate-left"></i></a>
+                            <a href="/tu-phim-theo-doi"><i class="fa-solid fa-bookmark"></i></a>
+                            <a href="javascript:void(0)" onclick="jQuery('#custom-login-modal').addClass('active')"><i class="fa-solid fa-arrow-right-to-bracket"></i></a>
+                        <?php endif; ?>
                     </div>
+                    <?php if (is_user_logged_in()): ?>
+                        <div class="wrapper profile-info">
+                            <ul class="menu-bar">
+                                <li class="profile">
+                                    <?= get_avatar( $current_user->ID ) ?>
+                                    <p><?= $current_user->display_name ?></p>
+                                </li>
+                                <li class="setting-item">
+                                    <a href="/trang-ca-nhan">
+                                        <div class="icon">
+                                            <i class="fa-solid fa-circle-info"></i>
+                                        </div>
+                                        <span>Thông Tin</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="<?= esc_url( wp_logout_url( home_url() ) ) ?>">
+                                        <div class="icon">
+                                            <i class="fa-solid fa-right-from-bracket"></i>
+                                        </div>
+                                        Đăng Xuất
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    <?php endif; ?>
                 </div>
 
             </div>

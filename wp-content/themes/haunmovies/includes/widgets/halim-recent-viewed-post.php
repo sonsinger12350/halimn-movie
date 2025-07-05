@@ -153,19 +153,58 @@ add_action( 'widgets_init', 'halim_register_widget' );
 
 function halim_posts_visited() {
 	if ( is_single() || is_page() ) {
-		$cookie    = 'halim_recent_posts';
-		$posts = isset( $_COOKIE[ $cookie ] ) ? json_decode( $_COOKIE[ $cookie ], true ) : null;
-		if ( isset( $posts ) ) {
-			// Remove current post in the cookie
-			$posts = array_diff( $posts, array( get_the_ID() ) );
-			// update cookie with current post
-			array_unshift( $posts, get_the_ID() );
-		} else {
-			$posts = array( get_the_ID() );
+		$post_id = get_the_ID();
+		$server = get_query_var('halim_server');
+		$episode = get_query_var("episode_slug");
+
+		if ( empty($server) || empty($episode) ) return;
+
+		$limit = 50;
+		$new_item = [
+			'post_id' => $post_id,
+			'server' => $server,
+			'episode' => $episode,
+			'time' => time()
+		];
+
+		// Nếu người dùng đã đăng nhập
+		if ( is_user_logged_in() ) {
+			$user_id = get_current_user_id();
+			$history = get_user_meta($user_id, 'halim_watch_history', true);
+			if ( !is_array($history) ) $history = [];
+
+			$history = array_filter($history, function($item) use ($post_id, $episode, $server) {
+				return !( $item['post_id'] == $post_id && $item['episode'] == $episode && $item['server'] == $server );
+			});
+
+			array_unshift($history, $new_item);
+
+			// Giới hạn
+			$history = array_slice($history, 0, $limit);
+
+			update_user_meta($user_id, 'halim_watch_history', $history);
 		}
-		setcookie( $cookie, json_encode( $posts ), time() + ( DAY_IN_SECONDS * 31 ), COOKIEPATH, COOKIE_DOMAIN );
+		// Nếu chưa đăng nhập thì lưu vào cookie
+		else {
+			$cookie_name = 'halim_recent_posts';
+			$history = isset($_COOKIE[$cookie_name]) ? json_decode(stripslashes($_COOKIE[$cookie_name]), true) : [];
+			if ( !is_array($history) ) $history = [];
+
+			$history = array_filter($history, function($item) use ($post_id, $episode, $server) {
+				return !( $item['post_id'] == $post_id && $item['episode'] == $episode && $item['server'] == $server );
+			});
+
+			array_unshift($history, $new_item);
+
+			// Giới hạn
+			$history = array_slice($history, 0, $limit);
+
+			setcookie($cookie_name, json_encode($history), time() + (DAY_IN_SECONDS * 31), COOKIEPATH, COOKIE_DOMAIN);
+		}
 	}
 }
+
+
 add_action( 'template_redirect', 'halim_posts_visited' );
 
 

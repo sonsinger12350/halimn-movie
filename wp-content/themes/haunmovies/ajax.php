@@ -178,6 +178,7 @@ add_action('wp_ajax_halim_follow_movie', 'handle_halim_follow_movie');
 add_action('wp_ajax_nopriv_halim_follow_movie', 'handle_halim_follow_movie');
 
 function handle_halim_follow_movie() {
+    if (!wp_verify_nonce($_POST['nonce'], 'follow_movie_nonce')) wp_send_json_error(['message' => 'Xác thực không hợp lệ']);
     $post_id = isset($_POST["post_id"]) ? absint($_POST["post_id"]) : 0;
     $user_id = get_current_user_id();
 
@@ -209,4 +210,105 @@ function handle_halim_follow_movie() {
     }
 }
 
+add_action('wp_ajax_delete_history', 'halim_delete_history');
+add_action('wp_ajax_nopriv_delete_history', 'halim_delete_history');
+
+function halim_delete_history() {
+    if (!wp_verify_nonce($_POST['nonce'], 'delete_history_nonce')) wp_send_json_error(['message' => 'Xác thực không hợp lệ']);
+	$clear_all = !empty($_POST['clear_all']) ? 1 : 0;
+	$post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
+	if (!$clear_all && !$post_id) wp_send_json_error(['message' => 'Thiếu thông tin']);
+
+	if (is_user_logged_in()) {
+		$user_id = get_current_user_id();
+
+		if ($clear_all) {
+			delete_user_meta($user_id, 'halim_watch_history');
+		}
+        else {
+			$history = get_user_meta($user_id, 'halim_watch_history', true);
+			if (!is_array($history)) $history = [];
+
+			$history = array_filter($history, function ($item) use ($post_id) {
+				return $item['post_id'] != $post_id;
+			});
+			update_user_meta($user_id, 'halim_watch_history', $history);
+		}
+	} else {
+		$cookie_name = 'halim_recent_posts';
+
+		if ($clear_all) {
+			setcookie($cookie_name, '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN);
+		}
+        else {
+			$history = isset($_COOKIE[$cookie_name]) ? json_decode(stripslashes($_COOKIE[$cookie_name]), true) : [];
+			if (!is_array($history)) $history = [];
+
+			$history = array_filter($history, function ($item) use ($post_id) {
+				return $item['post_id'] != $post_id;
+			});
+
+			setcookie($cookie_name, json_encode(array_values($history)), time() + (DAY_IN_SECONDS * 31), COOKIEPATH, COOKIE_DOMAIN);
+		}
+	}
+
+	wp_send_json_success();
+}
+
+add_action('wp_ajax_halim_upload_avatar', function() {
+	if (!is_user_logged_in()) wp_send_json_error(['message' => 'Bạn chưa đăng nhập']);
+	if (!wp_verify_nonce($_POST['nonce'], 'upload_avatar_nonce')) wp_send_json_error(['message' => 'Xác thực không hợp lệ']);
+
+	if (empty($_FILES['custom_avatar'])) wp_send_json_error(['message' => 'Không có file nào được chọn']);
+
+	$file = $_FILES['custom_avatar'];
+	$user_id = get_current_user_id();
+
+    if ($file['size'] > 1048576) wp_send_json_error(['message' => 'Ảnh không được lớn hơn 1MB']);
+
+	require_once ABSPATH . 'wp-admin/includes/file.php';
+	require_once ABSPATH . 'wp-admin/includes/image.php';
+
+	$upload = wp_handle_upload($file, ['test_form' => false]);
+
+	if (!empty($upload['error'])) {
+		wp_send_json_error(['message' => $upload['error']]);
+	}
+
+	// Tạo attachment
+	$attachment = [
+		'post_mime_type' => $upload['type'],
+		'post_title'     => sanitize_file_name($file['name']),
+		'post_status'    => 'inherit'
+	];
+
+	$attach_id = wp_insert_attachment($attachment, $upload['file']);
+	$attach_data = wp_generate_attachment_metadata($attach_id, $upload['file']);
+	wp_update_attachment_metadata($attach_id, $attach_data);
+
+	update_user_meta($user_id, 'custom_avatar_id', $attach_id);
+
+	$avatar_url = wp_get_attachment_image_src($attach_id, 'thumbnail')[0];
+
+	wp_send_json_success(['avatar' => $avatar_url]);
+});
+
+add_action('wp_ajax_halim_update_user_info', function () {
+	if (!is_user_logged_in()) wp_send_json_error(['message' => 'Bạn chưa đăng nhập']);
+
+	if (!wp_verify_nonce($_POST['nonce'], 'update_user_info_nonce')) wp_send_json_error(['message' => 'Xác thực không hợp lệ']);
+
+	$user_id = get_current_user_id();
+	$display_name = sanitize_text_field($_POST['display_name']);
+
+	if (strlen($display_name) < 2) wp_send_json_error(['message' => 'Tên hiển thị quá ngắn']);
+	if (strlen($display_name) > 50) wp_send_json_error(['message' => 'Tên hiển phải ít hơn 50 kí tự']);
+
+	wp_update_user([
+		'ID' => $user_id,
+		'display_name' => $display_name,
+	]);
+
+	wp_send_json_success(['message' => 'Đã cập nhật thông tin']);
+});
 ?>

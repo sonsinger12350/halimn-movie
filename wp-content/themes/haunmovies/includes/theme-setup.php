@@ -126,11 +126,13 @@ function halim_enqueue_scripts()
         "sync" => cs_get_option("halim_disable_debug"), 
         "db_redirect_url" => cs_get_option("haim_debug_redirect_url") ?: "https://halimthemes.com",
         'is_logged_in' => is_user_logged_in(),
+        'nonce' => wp_create_nonce("ajax-nonce"),
     ]);
     if (is_single()) {
         wp_localize_script("halim-init", "ajax_var", ["url" => HALIM_THEME_URI . "/halim-ajax.php", "nonce" => wp_create_nonce("ajax-nonce")]);
         wp_localize_script("halim-init", "halim_rate", [
             "ajaxurl" => HALIM_THEME_URI . "/halim-ajax.php", 
+            "follow_movie_nonce" => wp_create_nonce("follow_movie_nonce"), 
             "nonce" => wp_create_nonce("halim_rate_nonce"), 
             "your_rating" => __("Thank you for rating!", "halimthemes"),
         ]);

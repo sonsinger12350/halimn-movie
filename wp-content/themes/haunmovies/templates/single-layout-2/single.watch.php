@@ -128,14 +128,20 @@ if (have_posts()): while (have_posts()): the_post();
 	<?php
 	endwhile;
 endif;
+?>
 
-if (cs_get_option('enable_site_comment') == 1 && comments_open()) :
-	if (class_exists('WpdiscuzCore')) {
-		comments_template();
-	} else {
-		echo '<div class="halim--notice">This theme requires the following plugin: <a href="https://wordpress.org/plugins/wpdiscuz/" rel="nofollow" target="_blank">wpDiscuz Comments</a></div>';
-	}
-endif;
+<div class="halim-comments">
+		<?php
+			if (cs_get_option('enable_site_comment') == 1 && comments_open()) :
+				if (class_exists('WpdiscuzCore')) {
+					comments_template();
+				} else {
+					echo '<div class="halim--notice">This theme requires the following plugin: <a href="https://wordpress.org/plugins/wpdiscuz/" rel="nofollow" target="_blank">wpDiscuz Comments</a></div>';
+				}
+			endif;
+		?>
+	</div>
+<?php
 
 if (cs_get_option('enable_disqus_comment') == 1) : ?>
 
@@ -158,7 +164,7 @@ if (cs_get_option('enable_disqus_comment') == 1) : ?>
 <div class="movie-rating-modal-overlay" id="ratingModal">
     <div class="movie-rating-modal">
         <div class="movie-rating-modal-header">
-            <button class="movie-rating-modal-close close-modal">✕</button>
+            <button class="movie-rating-modal-close close-modal-rating">✕</button>
             <h2 class="movie-rating-movie-title"><?= $the_title ?></h2>
             <div class="movie-rating-movie-rating">
                 <span class="movie-rating-rating-icon">★</span>
@@ -177,82 +183,9 @@ if (cs_get_option('enable_disqus_comment') == 1) : ?>
             </div>
         </div>
         <div class="movie-rating-modal-footer">
-            <button class="movie-rating-btn movie-rating-btn-primary" id="submitRatingBtn">Gửi đánh giá</button>
-            <button class="movie-rating-btn movie-rating-btn-secondary close-modal">Đóng</button>
+            <button class="movie-rating-btn movie-rating-btn-primary" id="submitRatingBtn" value="<?= $post->ID ?>">Gửi đánh giá</button>
+            <button class="movie-rating-btn movie-rating-btn-secondary close-modal-rating">Đóng</button>
         </div>
     </div>
 </div>
 <!-- End of Modal rating -->
-<script>
-	jQuery(function($) {
-		$('body').on("input", "#keyword-ep", function() {
-			let keyword = $(this).val().trim();
-			
-			if (keyword.length <= 0) {
-				console.log(1);
-				$('#halim-list-server .halim-list-eps .halim-episode').show();
-				return false;
-			}
-			console.log(2);
-			$('#halim-list-server .halim-list-eps .halim-episode').each(function() {
-				let ep = $(this).find('span').html();
-
-				if (ep.indexOf(keyword) !== -1) {
-					$(this).show();
-				}
-				else {
-					$(this).hide();
-				}
-			});
-		});
-
-		$('body').on('click', '.halim-rating-button', function(e) {
-			$('.movie-rating-modal-overlay').addClass('active');
-		});
-
-		$('body').on('click', '.close-modal', function(e) {
-			$('.movie-rating-modal-overlay').removeClass('active');
-		});
-
-		$('body').on("click", ".movie-rating-rating-option", function() {
-			$('.movie-rating-rating-option').removeClass('selected');       
-			$(this).addClass('selected');       
-		});
-
-		$('body').on("click", "#submitRatingBtn", function() {
-			let selectedOption = $('.movie-rating-rating-option.selected');
-			let totalVote = $('.total-vote').html();
-
-			if (selectedOption.length === 0) {
-				createToast({
-					type: "warning",
-					text: "Vui lòng chọn một đánh giá trước khi gửi."
-				});
-				return false;
-			}
-
-	        return $.post(halim_rate.ajaxurl, {
-	            action: "halim_rate_post",
-	            nonce: halim_rate.nonce,
-	            post: '<?= $post->ID ?>',
-	            value: selectedOption.attr('data-value'),
-	        },
-	        function(data){
-				if(data !== 'Voted'){
-					$(".total-rating").html(data);
-					$(".total-vote").html(parseInt(totalVote) + 1);
-					createToast({
-						type: "success",
-						text: halim_rate.your_rating
-					});
-					$('.movie-rating-modal-overlay').removeClass('active');
-				} else {
-					createToast({
-						type: "info",
-						text: 'Bạn đã đánh giá phim này rồi!'
-					});
-				}
-	        }, "html"), !1
-	    });
-	});
-</script>

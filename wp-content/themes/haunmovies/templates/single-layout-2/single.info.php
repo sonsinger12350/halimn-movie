@@ -84,7 +84,7 @@
 <div class="movie-rating-modal-overlay" id="ratingModal">
     <div class="movie-rating-modal">
         <div class="movie-rating-modal-header">
-            <button class="movie-rating-modal-close close-modal">✕</button>
+            <button class="movie-rating-modal-close close-modal-rating">✕</button>
             <h2 class="movie-rating-movie-title"><?= $the_title ?></h2>
             <div class="movie-rating-movie-rating">
                 <span class="movie-rating-rating-icon">★</span>
@@ -103,8 +103,8 @@
             </div>
         </div>
         <div class="movie-rating-modal-footer">
-            <button class="movie-rating-btn movie-rating-btn-primary" id="submitRatingBtn">Gửi đánh giá</button>
-            <button class="movie-rating-btn movie-rating-btn-secondary close-modal">Đóng</button>
+            <button class="movie-rating-btn movie-rating-btn-primary" id="submitRatingBtn" value="<?= $post->ID ?>">Gửi đánh giá</button>
+            <button class="movie-rating-btn movie-rating-btn-secondary close-modal-rating">Đóng</button>
         </div>
     </div>
 </div>
@@ -184,17 +184,17 @@
                 <i class="fa-sharp fa-regular fa-circle-play"></i>Xem Phim 
 			</a>
         </div>
-        <div class="last">
+        <div class="last" data-id="<?= $post->ID ?>">
 			<?php if (in_array($post->ID, $list_movie_follow)): ?>
-				<div id="follow-btn" class="button-default bg-lochinvar followed">
+				<button id="follow-btn" class="button-default bg-lochinvar followed">
 					<i class="fa-sharp fa-solid fa-bookmark"></i>
 					<div class="follow-btn">Hủy Theo Dõi</div>
-				</div>
+				</button>
 			<?php else: ?>
-				<div id="follow-btn" class="button-default bg-lochinvar">
+				<button id="follow-btn" class="button-default bg-lochinvar">
 					<i class="fa-sharp fa-solid fa-bookmark"></i>
 					<div class="follow-btn">Theo Dõi</div>
-				</div>
+				</button>
 			<?php endif ?>
         </div>
     </div>
@@ -239,126 +239,16 @@
             </div>
         </div>
     </div>
-</div>
-<script>
-	jQuery(function($) {
-		$('body').on('click', '.halim-rating-button', function(e) {
-			$('.movie-rating-modal-overlay').addClass('active');
-		});
-
-		$('body').on('click', '.close-modal', function(e) {
-			$('.movie-rating-modal-overlay').removeClass('active');
-		});
-
-		$('body').on("click", ".movie-rating-rating-option", function() {
-			$('.movie-rating-rating-option').removeClass('selected');       
-			$(this).addClass('selected');       
-		});
-
-		$('body').on("click", "#submitRatingBtn", function() {
-			let selectedOption = $('.movie-rating-rating-option.selected');
-			let totalVote = $('.total-vote').html();
-
-			if (selectedOption.length === 0) {
-				createToast({
-					type: "warning",
-					text: "Vui lòng chọn một đánh giá trước khi gửi."
-				});
-				return false;
-			}
-
-	        return $.post(halim_rate.ajaxurl, {
-	            action: "halim_rate_post",
-	            nonce: halim_rate.nonce,
-	            post: '<?= $post->ID ?>',
-	            value: selectedOption.attr('data-value'),
-	        },
-	        function(data){
-				if(data !== 'Voted'){
-					$(".total-rating").html(data);
-					$(".total-vote").html(parseInt(totalVote) + 1);
-					createToast({
-						type: "success",
-						text: halim_rate.your_rating
-					});
-					$('.movie-rating-modal-overlay').removeClass('active');
+	<div class="halim-comments">
+		<?php
+			if (cs_get_option('enable_site_comment') == 1 && comments_open()) :
+				if (class_exists('WpdiscuzCore')) {
+					comments_template();
 				} else {
-					createToast({
-						type: "info",
-						text: 'Bạn đã đánh giá phim này rồi!'
-					});
+					echo '<div class="halim--notice">This theme requires the following plugin: <a href="https://wordpress.org/plugins/wpdiscuz/" rel="nofollow" target="_blank">wpDiscuz Comments</a></div>';
 				}
-	        }, "html"), !1
-	    });
-
-		$('body').on("input", "#keyword-ep", function() {
-			let keyword = $(this).val().trim();
-			
-			if (keyword.length <= 0) {
-				console.log(1);
-				$('#halim-list-server .halim-list-eps .halim-episode').show();
-				return false;
-			}
-			console.log(2);
-			$('#halim-list-server .halim-list-eps .halim-episode').each(function() {
-				let ep = $(this).find('span').html();
-
-				if (ep.indexOf(keyword) !== -1) {
-					$(this).show();
-				}
-				else {
-					$(this).hide();
-				}
-			});
-	    });
-
-		$('body').on("click", "#follow-btn", function() {
-			if (halim.is_logged_in != '1') {
-				createToast({
-					type: "error",
-					text: "Vui lòng đăng nhập để theo dõi phim!"
-				});
-				return;
-			}
-
-			$.ajax({
-				url: halim_rate.ajaxurl,
-				type: "POST",
-				data: {
-					action: "halim_follow_movie",
-					nonce: halim_rate.nonce,
-					post_id: '<?= $post->ID ?>'
-				},
-				success: function(rs) {
-					console.log(rs);
-					console.log(rs.data.action);
-					if (rs.success) {
-						if (rs.data.action == 'follow') {
-							$('#follow-btn').addClass('followed');
-							$('.follow-btn').text('Hủy Theo Dõi');
-							createToast({
-								type: "success",
-								text: "Bạn đã theo dõi phim này!"
-							});
-						}
-						else {
-							$('#follow-btn').removeClass('followed');
-							$('.follow-btn').text('Theo Dõi');
-							createToast({
-								type: "success",
-								text: "Bạn đã bỏ theo dõi phim này!"
-							});
-						}
-					}
-					else {
-						createToast({
-							type: "error",
-							text: "Có lỗi, vui lòng thử lại"
-						});
-					}
-				}
-			});
-	    });
-	})
-</script>
+			endif;
+		?>
+	</div>
+</div>
 <?php do_action('halim_after_single_content', $post->ID); ?>
