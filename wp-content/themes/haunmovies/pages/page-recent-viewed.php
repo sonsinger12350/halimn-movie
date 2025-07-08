@@ -159,32 +159,38 @@ get_header();?>
 		});
 
 		$('body').on('click', '#delete-history-user', function() {
-			if (!confirm("Bạn có chắc muốn xóa toàn bộ lịch sử?")) return;
-
-			$.ajax({
-				url: halim.ajax_url,
-				type: "POST",
-				data: {
-					action: "delete_history",
-					nonce: '<?= wp_create_nonce('delete_history_nonce') ?>',
-					clear_all: 1
-				},
-				success: function(rs) {
-					if (rs.success) {
-						$('.history-grid .history-card').remove();
-						createToast({
-							type: "success",
-							text: "Đã xóa khỏi lịch sử"
-						});
-					}
-					else {
-						createToast({
-							type: "error",
-							text: "Có lỗi, vui lòng thử lại!"
-						});
-					}
+			showCustomConfirm({
+				title: 'Xác nhận xóa lịch sử xem phim',
+				message: 'Bạn có chắc muốn xóa tất cả lịch sử xem phim?',
+				confirmText: 'Xóa',
+				cancelText: 'Hủy',
+				onConfirm: function () {
+					$.ajax({
+						url: halim.ajax_url,
+						type: "POST",
+						data: {
+							action: "delete_history",
+							nonce: '<?= wp_create_nonce('delete_history_nonce') ?>',
+							clear_all: 1
+						},
+						success: function(rs) {
+							if (rs.success) {
+								$('.history-grid .history-card').remove();
+								createToast({
+									type: "success",
+									text: "Đã xóa khỏi lịch sử"
+								});
+							}
+							else {
+								createToast({
+									type: "error",
+									text: "Có lỗi, vui lòng thử lại!"
+								});
+							}
+						}
+					});
 				}
-			});
+			})
 		});
 	});
 </script>

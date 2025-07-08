@@ -165,7 +165,12 @@
 
 /* Main Color */
 .main-navigation .navbar-nav>li>a:hover,
-.main-navigation .navbar-nav>li>a:focus {
+.main-navigation .navbar-nav>li>a:focus,
+.section-title span.sortby a.active,
+.item-content-toggle .show-more:hover,
+.profile-usertitle-name a,
+.bottom-nav__link--active,
+.download-table a:hover {
     color: var(--text-color);
 }
 
