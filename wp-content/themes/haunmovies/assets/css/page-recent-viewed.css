@@ -66,8 +66,8 @@
 }
 
 .clear-history:hover {
-	background: var(--accent-color);
-	color: #000
+	background: var(--btn-bg-color);
+	color: #fff;
 }
 
 .clear-history i {
@@ -142,7 +142,7 @@
 
 .history-info-episode {
 	font-size: 13px;
-	color: var(--accent-color);
+	color: var(--text-color);
 	margin-bottom: 5px;
 	display: flex;
 	align-items: center;
@@ -390,8 +390,9 @@
 	}
 
 	.clear-history {
-		width: 100%;
-		text-align: center
+		text-align: center;
+		font-size: 13px;
+		padding: 8px 16px;
 	}
 }
 

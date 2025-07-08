@@ -105,7 +105,7 @@
     font-weight: 700;
     padding: 0;
     margin: 0;
-    color: #cf8e19
+    color: var(--text-color);
 }
 
 .new-ep {
@@ -410,7 +410,7 @@
 
 .bg-lochinvar {
     transition: all .4s ease-in-out;
-    background-image: linear-gradient(to right,#fb0,#e43603,#ff6290,#ff5000);
+    background-image: var(--btn-bg-color);
     background-size: 300% 100%
 }
 
@@ -601,14 +601,14 @@ a.bg-lochinvar:hover {
     margin-bottom: 5px;
     background: #0b0f15;
     padding: 8px 10px 5px;
-    color: #ea9b06;
+    color: var(--text-color);
     font-weight: 700;
     text-transform: uppercase
 }
 
 .halim-light-mode #halim-list-server .halim-server.show_all_eps .halim-server-name {
     background: #e9ebee;
-    color: #4e4e4e
+    color: var(--text-color);
 }
 
 #halim-list-server li {
@@ -677,6 +677,10 @@ a.bg-lochinvar:hover {
     margin: 0
 }
 
+.halim_showtime_movies p span {
+    color: var(--text-color);
+}
+
 .entry-content,
 .post-content {
     background: #292929;
@@ -716,6 +720,14 @@ a.bg-lochinvar:hover {
     z-index: 1;
 }
 
+.button-watch .luotxem:has([href="#moretool"]) {
+    display: none !important;
+}
+
+#explayer {
+    display: none !important;
+}
+
 @media(max-width: 767px) {
     .info-movie .head .first {
         width:28%
@@ -723,7 +735,7 @@ a.bg-lochinvar:hover {
 
     .info-movie .head .last {
         width: 72%;
-        font-size: 12px
+        font-size: 12px;
         margin-left: 5px
     }
 
@@ -838,3 +850,76 @@ a.bg-lochinvar:hover {
         text-align: left
     }
 }
+
+@media (max-width: 350px) {
+    #halim-list-server ul li span {
+        padding: 6px;
+    }
+}
+
+/* Halimn comments */
+#wpdcom {
+    max-width: 100%;
+}
+
+#wpdcom .wpd-form .wpdiscuz-textarea-wrap textarea,
+#wpdcom textarea.wc_comment {
+    height: 54px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 14px;
+    box-shadow: inset 1px 1px 8px rgba(0,0,0,.1);
+    font-family: inherit;
+    outline: none;
+    -webkit-transition: .18s ease-out;
+    -moz-transition: .18s ease-out;
+    -o-transition: .18s ease-out;
+    transition: .18s ease-out;
+    resize: none
+}
+
+#wpdcom .wpd-form .wpdiscuz-textarea-wrap textarea:hover {
+    box-shadow: inset 1px 2px 8px rgba(0,0,0,.02)
+}
+
+#wpdcom .wpd-form .wpdiscuz-textarea-wrap textarea::-moz-placeholder {
+    line-height: 28px;
+    color: #666;
+    font-size: 16px
+}
+
+#wpdcom .wpd-form .wpdiscuz-textarea-wrap textarea::-webkit-input-placeholder {
+    line-height: 28px;
+    color: #666;
+    font-size: 16px
+}
+
+#wpdcom .wpd-form .wpdiscuz-textarea-wrap textarea:-ms-input-placeholder {
+    line-height: 28px;
+    color: #666;
+    font-size: 16px
+}
+
+#wpdcom .wpd-form-row .wpdiscuz-item input[type=text],#wpdcom .wpd-form-row .wpdiscuz-item input[type=email],#wpdcom .wpd-form-row .wpdiscuz-item input[type=url],#wpdcom .wpd-form-row .wpdiscuz-item input[type=color],#wpdcom .wpd-form-row .wpdiscuz-item input[type=date],#wpdcom .wpd-form-row .wpdiscuz-item input[type=datetime],#wpdcom .wpd-form-row .wpdiscuz-item input[type=datetime-local],#wpdcom .wpd-form-row .wpdiscuz-item input[type=month],#wpdcom .wpd-form-row .wpdiscuz-item input[type=number],#wpdcom .wpd-form-row .wpdiscuz-item input[type=time],#wpdcom textarea,#wpdcom select {
+    background: #161616 !important;
+    border: 1px solid #161616 !important;
+    color: #e3e3e3 !important
+}
+
+#wpdcom .wpd-form-head {
+    display: none;
+}
+
+#wpdcom .wpd-comment {
+    margin-bottom: 8px;
+}
+
+#wpdcom .wpd-comment .wpd-comment-right {
+    background-color: #292929;
+    padding: 5px 15px;
+    border-radius: 12px;
+    position: relative;
+}
+/* End of Halimn comments */

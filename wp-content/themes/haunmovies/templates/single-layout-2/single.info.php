@@ -37,7 +37,7 @@
 		$showtime_converted = [];
 
 		foreach ($showtime['halim_showtime_movies'] as $k) {
-			$showtime_converted[] = '<span style="color: #FFA500;">' . $list_showtime[$k] . '</span>';
+			$showtime_converted[] = '<span>' . $list_showtime[$k] . '</span>';
 		}
 
 		$showtime_text = implode(', ', $showtime_converted);
@@ -76,6 +76,8 @@
 			'text' => 'Thảm họa'
 		]
 	];
+
+	$related_movie = get_post_meta($post->ID, '_custom_related_movie', true);
 ?>
 
 <link rel="stylesheet" href="<?= get_stylesheet_directory_uri() ?>/assets/css/movie-info.css?v=<?= time() ?>"/>
@@ -178,7 +180,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="d-flex justify-content-between p-3 mb-3">
+	<div class="d-flex justify-content-between p-3 mb-3 ah-frame-bg">
         <div class="d-flex justify-content-between">
             <a href="<?= $watch_url ?>" class="button-default bg-lochinvar" title="Xem tập mới nhất">
                 <i class="fa-sharp fa-regular fa-circle-play"></i>Xem Phim 
@@ -198,6 +200,15 @@
 			<?php endif ?>
         </div>
     </div>
+	<?php if (!empty($related_movie)): ?>
+		<ul id="list-movies-part" class="list-movies-part">
+			<?php foreach ($related_movie as $v): ?>
+				<li class="movies-part">
+					<a href="<?= get_permalink($v['post_id']) ?>" class="<?= $v['post_id'] == $post->ID ? 'active' : '' ?>" title="Phần 1"><?= esc_html($v['title']) ?></a>
+				</li>
+			<?php endforeach ?>
+		</ul>
+	<?php endif ?>
 	<div class="filter-episode">
         <span>
             <i class="hl-search"></i> Tìm tập nhanh <i class="hl-angle-down"></i>

@@ -5,8 +5,16 @@
 	*/
 	get_header();
 
-	$showtime = list_showtime();
-	$day = isset($_GET['day']) ? $_GET['day'] : 'sun';
+	$showtime = [
+		'sun' => 'Chủ Nhật',
+        'mon' => 'Thứ Hai',
+        'tue' => 'Thứ Ba',
+        'wed' => 'Thứ Tư',
+        'thu' => 'Thứ Năm',
+        'fri' => 'Thứ Sáu',
+        'sat' => 'Thứ Bảy',
+    ];
+	$day = isset($_GET['day']) ? $_GET['day'] : strtolower(date('D'));
 ?>
 <style>
 	.page-showtime {
@@ -368,7 +376,7 @@
 					$post_title = $post->post_title;
 				?>
 					<a href="<?= $post->guid ?>" class="schedule-item">
-						<img src="<?= $meta['halim_thumb_url'] ?>" alt="<?= $post_title ?>" loading="lazy">
+						<img src="<?= get_the_post_thumbnail_url( $post->ID, 'medium' ); ?>" alt="<?= $post_title ?>" loading="lazy">
 						<div class="schedule-info">
 							<h3 class="schedule-title"><?= $post_title ?></h3>
 							<div class="schedule-episode">

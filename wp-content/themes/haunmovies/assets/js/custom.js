@@ -1,3 +1,49 @@
+function showModalLogin() {
+	$('#custom-login-modal').addClass('active');
+}
+
+function showCustomConfirm(options) {
+	const {
+		title = 'Xác nhận',
+		message = 'Bạn có chắc chắn?',
+		confirmText = 'Xác nhận',
+		cancelText = 'Hủy',
+		onConfirm = () => {},
+		onCancel = () => {}
+	} = options;
+
+	// Set nội dung
+	$('.custom-confirm-title').text(title);
+	$('.custom-confirm-text').text(message);
+	$('.custom-confirm-confirm').text(confirmText);
+	$('.custom-confirm-cancel').text(cancelText);
+
+	// Hiển thị modal
+	$('.custom-confirm-overlay').fadeIn(200);
+
+	// Clear sự kiện cũ
+	$('.custom-confirm-confirm').off('click');
+	$('.custom-confirm-cancel').off('click');
+
+	// Gán sự kiện mới
+	$('.custom-confirm-confirm').on('click', function () {
+		$('.custom-confirm-overlay').fadeOut(200);
+		onConfirm();
+	});
+	$('.custom-confirm-cancel').on('click', function () {
+		$('.custom-confirm-overlay').fadeOut(200);
+		onCancel();
+	});
+
+	// Click ra ngoài để đóng
+	$('.custom-confirm-overlay').off('click').on('click', function (e) {
+		if ($(e.target).is('.custom-confirm-overlay')) {
+			$(this).fadeOut(200);
+			onCancel();
+		}
+	});
+}
+
 $(document).ready(function() {
 	$('body').on('click', '#halim-advanced-widget-2 .showtime .item', function(e) {
 		let btn = $(this);
@@ -6,6 +52,7 @@ $(document).ready(function() {
 		if (btn.attr('disabled')) return false;
 
 		btn.attr('disabled', true);
+		$('#halim-advanced-widget-2-ajax-box').append('<div class="halim-ajax-popular-post-loading"></div>');
 
 		if (tab) {
 			$.ajax({
@@ -29,6 +76,10 @@ $(document).ready(function() {
 		}
 	});
 
+	$('body').on('click', '[href="#collapseShowtime"]', function(e) {
+		$(this).toggleClass('active');
+	});
+
 	$('body').on('click', '.halim-rating-button', function(e) {
 		$('.movie-rating-modal-overlay').addClass('active');
 	});
@@ -44,7 +95,7 @@ $(document).ready(function() {
 
 	$('body').on("click", "#submitRatingBtn", function() {
 		let selectedOption = $('.movie-rating-rating-option.selected');
-		let totalVote = $('.total-vote').html();
+		let totalVote = $('.total-vote').html() || 0;
 		let btn = $(this);
 		let id = btn.val();
 
@@ -105,14 +156,6 @@ $(document).ready(function() {
 	});
 
 	$('body').on("click", "#follow-btn", function() {
-		if (halim.is_logged_in != '1') {
-			createToast({
-				type: "error",
-				text: "Vui lòng đăng nhập để theo dõi phim!"
-			});
-			return;
-		}
-
 		let btn = $(this);
 		let post = btn.closest('.last').attr('data-id');
 
@@ -162,6 +205,8 @@ $(document).ready(function() {
 				}
 			}
 		});
+
+		return false;
 	});
 
 	$('body').on("input", "#keyword-ep", function() {
@@ -195,5 +240,51 @@ $(document).ready(function() {
 		) {
 			$('.profile-info').removeClass('show');
 		}
+	});
+
+	$('#custom-login-form').on('submit', function(e) {
+		e.preventDefault();
+
+		let nonce = $(this).find('input[name="nonce"]').val();
+		let username = $(this).find('input[name="username"]').val();
+		let password = $(this).find('input[name="password"]').val();
+		let remember = $(this).find('input[name="remember"]').is(':checked') ? 1 : 0;
+
+		if (nonce.length <= 0 || username.length <= 0 || password.length <= 0) {
+			createToast({
+				type: "error",
+				text: "Vui lòng nhập đầy đủ thông tin"
+			});
+			return false;
+		}
+
+		$.ajax({
+			url: halim.ajax_url,
+			type: "POST",
+			data: {
+				action: "halim_user_login",
+				nonce: nonce,
+				username: username,
+				password: password,
+				remember: remember
+			},
+			success: function(rs) {
+				if (rs.success) {
+					createToast({
+						type: "success",
+						text: "Đăng nhập thành công"
+					});
+					setTimeout(function() {
+						location.reload();
+					}, 1000);
+				}
+				else {
+					createToast({
+						type: "error",
+						text: "Đăng nhập thất bại"
+					});
+				}
+			}
+		});
 	});
 });

@@ -173,8 +173,8 @@ function halim_posts_visited() {
 			$history = get_user_meta($user_id, 'halim_watch_history', true);
 			if ( !is_array($history) ) $history = [];
 
-			$history = array_filter($history, function($item) use ($post_id, $episode, $server) {
-				return !( $item['post_id'] == $post_id && $item['episode'] == $episode && $item['server'] == $server );
+			$history = array_filter($history, function($item) use ($post_id) {
+				return !( $item['post_id'] == $post_id);
 			});
 
 			array_unshift($history, $new_item);
@@ -190,8 +190,8 @@ function halim_posts_visited() {
 			$history = isset($_COOKIE[$cookie_name]) ? json_decode(stripslashes($_COOKIE[$cookie_name]), true) : [];
 			if ( !is_array($history) ) $history = [];
 
-			$history = array_filter($history, function($item) use ($post_id, $episode, $server) {
-				return !( $item['post_id'] == $post_id && $item['episode'] == $episode && $item['server'] == $server );
+			$history = array_filter($history, function($item) use ($post_id) {
+				return !( $item['post_id'] == $post_id);
 			});
 
 			array_unshift($history, $new_item);

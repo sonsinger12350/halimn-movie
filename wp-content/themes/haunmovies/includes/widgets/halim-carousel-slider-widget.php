@@ -48,6 +48,13 @@ class HaLim_Carousel_Slider_Widget extends WP_Widget {
 						'post_type'			=> 'post',
 						'posts_per_page' 	=> $postnum,
 						'post_status' 		=> 'publish',
+						'meta_query'     => array(
+							array(
+								'key'     => '_halim_metabox_options',
+								'value'   => 'is_carousel_slide',
+								'compare' => 'LIKE',
+							),
+						),
 					);
 
 					if($type == 'featured') {
@@ -79,7 +86,8 @@ class HaLim_Carousel_Slider_Widget extends WP_Widget {
 							<div class="halim-item">
 								<a class="halim-thumb" href="<?= $post->guid ?>" title="<?= $post_title ?>">
 									<figure class="<?= $number % 2 == 0 ? 'clip-path-even' : 'clip-path-odd' ?>">
-										<img class="lazyload blur-up img-responsive" data-sizes="auto" data-src="<?= $meta['halim_thumb_url'] ?>" alt="<?= $post_title ?>" title="<?= $post_title ?>">
+										<div class="halim-trending-poster-mask halim-trending-clip-path-odd"></div>
+										<img class="lazyload blur-up img-responsive" data-sizes="auto" data-src="<?= get_the_post_thumbnail_url( $post->ID, 'medium' ); ?>" alt="<?= $post_title ?>" title="<?= $post_title ?>">
 										<span class="episode"><?= $rating ?></span>
 									</figure>
 									<div class="halim-post-title-box">

@@ -353,15 +353,7 @@ $options[] = array(
           'type'  => 'checkbox',
           'title' => __('Showtime movies', 'halimthemes'),
           'class' => 'horizontal',
-          'options' => array(
-            'mon' => 'Thứ Hai',
-            'tue' => 'Thứ Ba',
-            'wed' => 'Thứ Tư',
-            'thu' => 'Thứ Năm',
-            'fri' => 'Thứ Sáu',
-            'sat' => 'Thứ Bảy',
-            'sun' => 'Chủ Nhật',
-          ),
+          'options' => list_showtime()
         ),
       )
     )

@@ -125,7 +125,7 @@
 						<div class="halim-item">
 							<a class="halim-thumb" href="<?= $post->guid ?>" title="<?= $post_title ?>">
 								<figure>
-									<img class="lazyload blur-up img-responsive" data-sizes="auto" data-src="<?= $meta['halim_thumb_url'] ?>" alt="<?= $post_title ?>" title="<?= $post_title ?>">
+									<img class="lazyload blur-up img-responsive" data-sizes="auto" data-src="<?= get_the_post_thumbnail_url( $post->ID, 'medium' ); ?>" alt="<?= $post_title ?>" title="<?= $post_title ?>">
 									<span class="number <?= $number <=3 ? 'top-'.$number : ''?>"><?= $number ?></span>
 								</figure>
 								<div class="halim-post-title-box">
@@ -143,7 +143,6 @@
 				endif; ?>
 			</div>
 		<div class="clearfix"></div>
-		<?php halim_pagination(); ?>
 	</section>
 	<?php if ( is_active_sidebar( 'halim-ad-below-category' ) ) { ?>
 	    <div class="a--d-wrapper" style="text-align: center; margin: 10px 0;">

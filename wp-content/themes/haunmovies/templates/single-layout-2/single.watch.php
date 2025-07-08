@@ -44,11 +44,13 @@ if (!empty($showtime['halim_showtime_movies'])) {
 	$showtime_converted = [];
 
 	foreach ($showtime['halim_showtime_movies'] as $k) {
-		$showtime_converted[] = '<span style="color: #FFA500;">' . $list_showtime[$k] . '</span>';
+		$showtime_converted[] = '<span>' . $list_showtime[$k] . '</span>';
 	}
 
 	$showtime_text = implode(', ', $showtime_converted);
 }
+
+$related_movie = get_post_meta($post->ID, '_custom_related_movie', true);
 
 if (have_posts()): while (have_posts()): the_post();
 ?>
@@ -63,6 +65,15 @@ if (have_posts()): while (have_posts()): the_post();
 		<div class="clearfix"></div>
 		<?php dynamic_sidebar('halim-ad-below-player') ?>
 		<div class="clearfix"></div>
+		<?php if (!empty($related_movie)): ?>
+			<ul id="list-movies-part" class="list-movies-part">
+				<?php foreach ($related_movie as $v): ?>
+					<li class="movies-part">
+						<a href="<?= get_permalink($v['post_id']) ?>" class="" title="Phần 1"><?= esc_html($v['title']) ?></a>
+					</li>
+				<?php endforeach; ?>
+			</ul>
+		<?php endif; ?>
 		<div class="filter-episode">
 			<span>
 				<i class="hl-search"></i> Tìm tập nhanh <i class="hl-angle-down"></i>

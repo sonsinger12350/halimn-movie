@@ -30,6 +30,16 @@ if (is_user_logged_in()) {
 		object-fit: cover;
 		border-radius: 50%;
 	}
+
+	.form-update-info {
+		width: 50%;
+	}
+
+	@media (max-width: 576px) {
+		.form-update-info {
+			width: 80%;
+		}
+	}
 </style>
 <main id="main-contents" class="col-xs-12 col-sm-12 col-md-8">
 	<?php if ( is_active_sidebar( 'halim-ad-above-category' ) ) { ?>
@@ -49,7 +59,7 @@ if (is_user_logged_in()) {
 							<h4 class="display-name"><b><?= $current_user->display_name ?></b></h4>
 						</div>
 						<div class="row mb-3 d-flex justify-content-center">
-							<div class="col-sm-6 fullright">
+							<div class="form-update-info">
 								<form method="post" id="update-info">
 									<div class="form-group">
 										<label for="display_name">Tên:</label>

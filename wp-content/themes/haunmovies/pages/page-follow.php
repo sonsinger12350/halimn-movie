@@ -33,51 +33,59 @@ get_header();?>
 					<span><?php _e('Tủ phim theo dõi') ?></span>
 			   </h3>
 			</div>
+			<?php if (!is_user_logged_in()): ?>
+				<div class="alert alert-danger">
+					<strong>Chú ý:</strong> Bạn cần 
+					<a href="javascript:void(0)" onclick="showModalLogin()">
+					<b>Đăng Nhập</b>
+					</a> tài khoản để có thể lưu phim theo dõi vào tài khoản của bạn, nếu không tủ phim này sẽ mất khi bạn xóa lịch sử trình duyệt !!!
+				</div>
+			<?php endif; ?>
 			<div class="halim_box">
-			<?php
-				if ( get_query_var('paged') ) $paged = get_query_var('paged');
-				elseif ( get_query_var('page') ) $paged = get_query_var('page');
-				else $paged = 1;
+				<?php
+					if ( get_query_var('paged') ) $paged = get_query_var('paged');
+					elseif ( get_query_var('page') ) $paged = get_query_var('page');
+					else $paged = 1;
 
-				$posts_per_page = get_option( 'posts_per_page' );
-				$followed = is_user_logged_in() ? get_user_meta(get_current_user_id(), 'halim_followed_movies', true) : [];
+					$posts_per_page = get_option( 'posts_per_page' );
+					$followed = is_user_logged_in() ? get_user_meta(get_current_user_id(), 'halim_followed_movies', true) : json_decode($_COOKIE['halim_followed_movies'], true);
 
-				if (!empty($followed)) {
-					$args = array(
-						'post_type' => 'post',
-						'paged'      		=> $paged,
-						'posts_per_page' 	=> $posts_per_page,
-						'order'	=> 'DESC',
-						'post__in' => $followed
-					);
+					if (!empty($followed)) {
+						$args = array(
+							'post_type' => 'post',
+							'paged'      		=> $paged,
+							'posts_per_page' 	=> $posts_per_page,
+							'order'	=> 'DESC',
+							'post__in' => $followed
+						);
 
-					$wp_query = new WP_Query( $args );
-					if ($wp_query->have_posts()) : while ($wp_query->have_posts()) : $wp_query->the_post();
-						$meta = get_post_meta($post->ID, '_halim_metabox_options', true );
-						$post_title = $post->post_title;
-						?>
-							<article class="col-md-3 col-sm-4 col-xs-6 thumb grid-item">
-								<div class="halim-item">
-									<a class="halim-thumb" href="<?= $post->guid ?>" title="<?= $post_title ?>">
-										<figure>
-											<img class="lazyload blur-up img-responsive" data-sizes="auto" data-src="<?= $meta['halim_thumb_url'] ?>" alt="<?= $post_title ?>" title="<?= $post_title ?>">
-										</figure>
-										<span class="episode"><?= $meta['halim_episode'] ?></span>
-										<span class="remove-follow" data-id="<?= $post->ID ?>"><i class="fa fa-times" aria-hidden="true"></i></span>
-										<div class="halim-post-title-box">
-											<div class="halim-post-title ">
-												<h2 class="entry-title"><?= $post_title ?></h2>
+						$wp_query = new WP_Query( $args );
+						if ($wp_query->have_posts()) : while ($wp_query->have_posts()) : $wp_query->the_post();
+							$meta = get_post_meta($post->ID, '_halim_metabox_options', true );
+							$post_title = $post->post_title;
+							?>
+								<article class="col-md-3 col-sm-4 col-xs-6 thumb grid-item">
+									<div class="halim-item">
+										<a class="halim-thumb" href="<?= $post->guid ?>" title="<?= $post_title ?>">
+											<figure>
+												<img class="lazyload blur-up img-responsive" data-sizes="auto" data-src="<?= get_the_post_thumbnail_url( $post->ID, 'medium' ); ?>" alt="<?= $post_title ?>" title="<?= $post_title ?>">
+											</figure>
+											<span class="episode"><?= $meta['halim_episode'] ?></span>
+											<span class="remove-follow" data-id="<?= $post->ID ?>"><i class="fa fa-times" aria-hidden="true"></i></span>
+											<div class="halim-post-title-box">
+												<div class="halim-post-title ">
+													<h2 class="entry-title"><?= $post_title ?></h2>
+												</div>
 											</div>
-										</div>
-									</a>
-								</div>
-							</article>
-						<?php
-					endwhile; wp_reset_postdata(); endif;
-				}
-				else {
-					echo '<p class="text-center">Bạn chưa theo dõi phim nào.</p>';
-				}
+										</a>
+									</div>
+								</article>
+							<?php
+						endwhile; wp_reset_postdata(); endif;
+					}
+					else {
+						echo '<p class="text-center">Bạn chưa theo dõi phim nào.</p>';
+					}
 				?>
 			</div>
 		<div class="clearfix"></div>
@@ -91,35 +99,44 @@ get_header();?>
 </main>
 <?php get_sidebar(); get_footer(); ?>
 <script>
-	$('body').on('click', '.remove-follow', function() {
+	$('body').on('click', '.remove-follow', function(e) {
+		e.preventDefault();
+
 		let post_id = $(this).attr('data-id');
 		let item = $(this).closest('.halim-item');
 
 		if (!post_id) return false;
-		if (!confirm("Hủy theo dõi phim?")) return;
 
-		$.ajax({
-			url: halim.ajax_url,
-			type: "POST",
-			data: {
-				action: "halim_follow_movie",
-				nonce: halim_rate.follow_movie_nonce,
-				post_id
-			},
-			success: function(rs) {
-				if (rs.success) {
-					item.remove();
-					createToast({
-						type: "success",
-						text: "Đã hủy theo dõi phim"
-					});
-				}
-				else {
-					createToast({
-						type: "error",
-						text: "Có lỗi, vui lòng thử lại!"
-					});
-				}
+		showCustomConfirm({
+			title: 'Xác nhận hủy theo dõi',
+			message: 'Bạn có chắc chắn muốn hủy theo dõi phim này?',
+			confirmText: 'Hủy theo dõi',
+			cancelText: 'Hủy',
+			onConfirm: function () {
+				$.ajax({
+					url: halim.ajax_url,
+					type: "POST",
+					data: {
+						action: "halim_follow_movie",
+						nonce: '<?= wp_create_nonce("follow_movie_nonce") ?>',
+						post_id
+					},
+					success: function(rs) {
+						if (rs.success) {
+							item.remove();
+							createToast({
+								type: "success",
+								text: "Đã hủy theo dõi phim"
+							});
+						}
+						else {
+							createToast({
+								type: "error",
+								text: "Có lỗi, vui lòng thử lại!"
+							});
+						}
+					}
+				});
 			}
 		});
 

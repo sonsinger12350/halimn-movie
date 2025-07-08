@@ -179,35 +179,37 @@ add_action('wp_ajax_nopriv_halim_follow_movie', 'handle_halim_follow_movie');
 
 function handle_halim_follow_movie() {
     if (!wp_verify_nonce($_POST['nonce'], 'follow_movie_nonce')) wp_send_json_error(['message' => 'Xác thực không hợp lệ']);
+    if (empty($_POST["post_id"])) wp_send_json_error(['message' => 'Thiếu thông tin']);
+
     $post_id = isset($_POST["post_id"]) ? absint($_POST["post_id"]) : 0;
     $user_id = get_current_user_id();
 
-    if ($post_id && $user_id) {
-        $followed_movies = get_user_meta($user_id, 'halim_followed_movies', true);
-        if (!is_array($followed_movies)) {
-            $followed_movies = [];
-        }
+    if ( is_user_logged_in() ) $followed_movies = get_user_meta($user_id, 'halim_followed_movies', true);
+    else $followed_movies = isset($_COOKIE['halim_followed_movies']) ? json_decode($_COOKIE['halim_followed_movies'], true) : [];
 
-        if (!in_array($post_id, $followed_movies)) {
-            // Follow
-            $followed_movies[] = $post_id;
-            update_user_meta($user_id, 'halim_followed_movies', $followed_movies);
-            wp_send_json_success([
-                'message' => 'Movie followed successfully!',
-                'action' => 'follow'
-            ]);
-        } else {
-            // Unfollow
-            $followed_movies = array_diff($followed_movies, [$post_id]);
-            update_user_meta($user_id, 'halim_followed_movies', $followed_movies);
-            wp_send_json_success([
-                'message' => 'Movie unfollowed successfully!',
-                'action' => 'unfollow'
-            ]);
-        }
+    if ( empty($followed_movies) || !is_array($followed_movies) ) $followed_movies = [];
+
+    if (!in_array($post_id, $followed_movies)) {
+        // Follow
+        $followed_movies[] = $post_id;
+        $action = 'follow';
     } else {
-        wp_send_json_error(['message' => 'Invalid post ID or user not logged in.']);
+        // Unfollow
+        $followed_movies = array_diff($followed_movies, [$post_id]);
+        $action = 'unfollow';
     }
+
+    if ( is_user_logged_in() ) {
+        update_user_meta($user_id, 'halim_followed_movies', $followed_movies);
+    }
+    else {
+        setcookie('halim_followed_movies', json_encode($followed_movies), time() + (DAY_IN_SECONDS * 31), COOKIEPATH, COOKIE_DOMAIN);
+    }
+
+    wp_send_json_success([
+        'message' => $action == 'follow' ? 'Phim đã được theo dõi!' : 'Phim đã được hủy theo dõi!',
+        'action' => $action
+    ]);
 }
 
 add_action('wp_ajax_delete_history', 'halim_delete_history');
@@ -248,7 +250,7 @@ function halim_delete_history() {
 				return $item['post_id'] != $post_id;
 			});
 
-			setcookie($cookie_name, json_encode(array_values($history)), time() + (DAY_IN_SECONDS * 31), COOKIEPATH, COOKIE_DOMAIN);
+			setcookie($cookie_name, json_encode($history), time() + (DAY_IN_SECONDS * 31), COOKIEPATH, COOKIE_DOMAIN);
 		}
 	}
 
@@ -311,4 +313,53 @@ add_action('wp_ajax_halim_update_user_info', function () {
 
 	wp_send_json_success(['message' => 'Đã cập nhật thông tin']);
 });
+
+add_action('wp_ajax_halim_change_password', function () {
+	if (!is_user_logged_in()) wp_send_json_error(['message' => 'Bạn chưa đăng nhập']);
+	if (!wp_verify_nonce($_POST['nonce'], 'change_password_nonce')) wp_send_json_error(['message' => 'Xác thực không hợp lệ']);
+
+	$user_id = get_current_user_id();
+	$new_password = sanitize_text_field($_POST['new_password']);
+	$confirm_password = sanitize_text_field($_POST['confirm_password']);
+
+	if ($new_password !== $confirm_password) wp_send_json_error(['message' => 'Mật khẩu không khớp']);
+
+	wp_set_password($new_password, $user_id);
+
+	wp_send_json_success(['message' => 'Đã cập nhật mật khẩu']);
+});
+
+add_action('wp_ajax_nopriv_halim_user_login', 'halim_user_login');
+add_action('wp_ajax_halim_user_login', 'halim_user_login');
+
+function halim_user_login() {
+    if (!wp_verify_nonce($_POST['nonce'], 'user_login_nonce')) wp_send_json_error(['message' => 'Xác thực không hợp lệ']);
+
+    $login_input = sanitize_text_field($_POST['username']);
+    $password = sanitize_text_field($_POST['password']);
+    $remember = !empty($_POST['remember']) ? true : false;
+    // Cho phép đăng nhập bằng email
+    $user = get_user_by('email', $login_input);
+
+    if ($user) {
+        $login_input = $user->user_login;
+    }
+
+    $creds = [
+        'user_login'    => $login_input,
+        'user_password' => $password,
+        'remember'      => $remember,
+    ];
+
+    $user = wp_signon($creds, is_ssl());
+
+    if (is_wp_error($user)) {
+        wp_send_json_error(['message' => 'Sai tài khoản hoặc mật khẩu']);
+    }
+
+    wp_send_json_success(['message' => 'Đăng nhập thành công']);
+}
+
+
+
 ?>

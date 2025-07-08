@@ -46,6 +46,8 @@
                 $postCount = number_format($count_posts->publish);
             }
         }
+
+        $current_path = untrailingslashit(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
     ?>
     <div id="custom-login-modal" class="custom-login">
         <div class="custom-login-content">
@@ -67,20 +69,15 @@
                     </svg>
                 </span> Đăng nhập bằng Google
             </a>
-            <!-- <form id="custom-login-form" class="custom-login-form">
-                <input type="text" id="custom-username" name="username" class="custom-input" placeholder="Tên tài khoản" required="">
-                <input type="password" id="custom-password" name="password" class="custom-input" placeholder="Mật khẩu" required="">
+            <form id="custom-login-form" class="custom-login-form">
+                <input type="hidden" name="nonce" value="<?= wp_create_nonce('user_login_nonce') ?>">
+                <input type="text" name="username" class="custom-input" placeholder="Email" required="">
+                <input type="password" name="password" class="custom-input" placeholder="Mật khẩu" required="">
                 <label for="custom-remember" class="custom-checkbox-label">
-                    <input type="checkbox" id="custom-remember" name="remember" class="custom-checkbox"> Ghi nhớ </label>
-                <div class="cf-turnstile" data-sitekey="0x4AAAAAABOYJ50RwHQ4oKMP" data-theme="dark" data-language="vi" data-callback="cfTurnstileCallback" data-error-callback="cfErrorCallback" data-timeout-callback="cfTimeoutCallback">
-                    <div>
-                        <input type="hidden" name="cf-turnstile-response" id="cf-chl-widget-4wd3p_response" value="0.kRIx7ypx_FFkjqv5cdHzgedoCoPhjMApr4DgrbQe9Hmfjxs2rFCCJcK0xmblbxh3HQqDrZFO6o8hdWH3mhqNGNaok5R2IW1w5klAaKCijY3Ggb8KbyFMWWhJVJQU-roWdHE58UAw6IYkA0HYCLga7TnHyy8O5T6oYRdGQP5zwirODgC_Iy-nckCBf49dkKqfX6Gh8GAjoERHqtGOYx3y_dePZyVApgE6z4kS--xsxU6hYIcZzzXU4ULFXw4axNvrqIvRaWUlB4A6exEpSl889RIHnF6lgFY05RyDWeKBmQnqPc0xLyZnjGZV6m3QidW4Fuc8qsN6MGeItOZWPyMxECkIic58Myms5PDOvECRbsoSavzIRWaIGpxETwQ_CN4RJJz_Qb5_5STgEBgwZF6RBeWISTITeIXxXjzFXZEz4oAKYos19v2DmT_o8GEQJjJXWbhI2P43f_abmzyoZuG0C7TIxnsF5fUGvputk87mdxfSNkokxHBBYTZ49Ic6pNU_1QAFVdjK_O8DFqf26hQhOeqx6McEPSTVIyRgL7JXfI5IQeJHbnjGU4K8qoBQQVSZo4nXJxPFZb5RzcZTv8lZMXR-zXPX-NVimv1__lOURL7vFqM37m-31cLZEOGWGVoKq9S7yWoVI9nyNSGMzxPcqa0hQLlVi67ycjBlAudB0LavoUy8ZgYd_jqDBj93PVL7_RmtSZdlv35DxtpxKvOvIF8-DuPq9X4x4AtdnXN-G8H4mF8ZRi9Xpg5HPxudUo052jZBZ-DjTbs6rg-9jldB3LysQKmi4HdePlVUPf2fz7nWi-Sd90d3YYbJ2HzqjRkzYEbjNISyiDRHvqJpDpVjwDfvuTHCkDr3KhMPUqdnSp5F-5aD4hxGegAI7GLMLGCQLEBZPCVexam7TE3MP3AIdvxAZi2nmUczzzSPbbY21oo.qEsKbTyeogEHcjp6kuj8Mg.02924befb98708e008e153b7d4134d9231629d47daafd35e7e989f5c4cccf799">
-                    </div>
-                </div>
-                <input type="hidden" id="cf-turnstile-response" name="cf_turnstile_response" value="0.kRIx7ypx_FFkjqv5cdHzgedoCoPhjMApr4DgrbQe9Hmfjxs2rFCCJcK0xmblbxh3HQqDrZFO6o8hdWH3mhqNGNaok5R2IW1w5klAaKCijY3Ggb8KbyFMWWhJVJQU-roWdHE58UAw6IYkA0HYCLga7TnHyy8O5T6oYRdGQP5zwirODgC_Iy-nckCBf49dkKqfX6Gh8GAjoERHqtGOYx3y_dePZyVApgE6z4kS--xsxU6hYIcZzzXU4ULFXw4axNvrqIvRaWUlB4A6exEpSl889RIHnF6lgFY05RyDWeKBmQnqPc0xLyZnjGZV6m3QidW4Fuc8qsN6MGeItOZWPyMxECkIic58Myms5PDOvECRbsoSavzIRWaIGpxETwQ_CN4RJJz_Qb5_5STgEBgwZF6RBeWISTITeIXxXjzFXZEz4oAKYos19v2DmT_o8GEQJjJXWbhI2P43f_abmzyoZuG0C7TIxnsF5fUGvputk87mdxfSNkokxHBBYTZ49Ic6pNU_1QAFVdjK_O8DFqf26hQhOeqx6McEPSTVIyRgL7JXfI5IQeJHbnjGU4K8qoBQQVSZo4nXJxPFZb5RzcZTv8lZMXR-zXPX-NVimv1__lOURL7vFqM37m-31cLZEOGWGVoKq9S7yWoVI9nyNSGMzxPcqa0hQLlVi67ycjBlAudB0LavoUy8ZgYd_jqDBj93PVL7_RmtSZdlv35DxtpxKvOvIF8-DuPq9X4x4AtdnXN-G8H4mF8ZRi9Xpg5HPxudUo052jZBZ-DjTbs6rg-9jldB3LysQKmi4HdePlVUPf2fz7nWi-Sd90d3YYbJ2HzqjRkzYEbjNISyiDRHvqJpDpVjwDfvuTHCkDr3KhMPUqdnSp5F-5aD4hxGegAI7GLMLGCQLEBZPCVexam7TE3MP3AIdvxAZi2nmUczzzSPbbY21oo.qEsKbTyeogEHcjp6kuj8Mg.02924befb98708e008e153b7d4134d9231629d47daafd35e7e989f5c4cccf799">
+                <input type="checkbox" name="remember" class="custom-checkbox"> Ghi nhớ </label>
                 <button type="submit" id="custom-login-submit" class="custom-submit active">Đăng nhập</button>
                 <div id="custom-login-message" class="custom-message"></div>
-            </form> -->
+            </form>
         </div>
     </div>
     <header id="header">
@@ -112,13 +109,13 @@
                 <div id="navdrop" class="col-md-4">
                     <div class="action-header">
                         <?php if (is_user_logged_in()): ?>
-                            <a href="/lich-su-xem-phim"><i class="fa-solid fa-clock-rotate-left"></i></a>
-                            <a href="/tu-phim-theo-doi"><i class="fa-solid fa-bookmark"></i></a>
+                            <a href="/lich-su-xem-phim" class="<?= $current_path == '/lich-su-xem-phim' ? 'active' : '' ?>"><i class="fa-solid fa-clock-rotate-left"></i></a>
+                            <a href="/tu-phim-theo-doi" class="<?= $current_path == '/tu-phim-theo-doi' ? 'active' : '' ?>"><i class="fa-solid fa-bookmark"></i></a>
                             <a href="javascript:void(0)" class="open-profile-info"><i class="fa-solid fa-circle-user"></i></a>
                         <?php else: ?>
-                            <a href="/lich-su-xem-phim"><i class="fa-solid fa-clock-rotate-left"></i></a>
-                            <a href="/tu-phim-theo-doi"><i class="fa-solid fa-bookmark"></i></a>
-                            <a href="javascript:void(0)" onclick="jQuery('#custom-login-modal').addClass('active')"><i class="fa-solid fa-arrow-right-to-bracket"></i></a>
+                            <a href="/lich-su-xem-phim" class="<?= $current_path == '/lich-su-xem-phim' ? 'active' : '' ?>"><i class="fa-solid fa-clock-rotate-left"></i></a>
+                            <a href="/tu-phim-theo-doi" class="<?= $current_path == '/tu-phim-theo-doi' ? 'active' : '' ?>"><i class="fa-solid fa-bookmark"></i></a>
+                            <a href="javascript:void(0)" onclick="showModalLogin()"><i class="fa-solid fa-arrow-right-to-bracket"></i></a>
                         <?php endif; ?>
                     </div>
                     <?php if (is_user_logged_in()): ?>
@@ -136,6 +133,14 @@
                                         <span>Thông Tin</span>
                                     </a>
                                 </li>
+                                <li class="setting-item">
+                                    <a href="/doi-mat-khau">
+                                        <div class="icon">
+                                            <i class="fa-solid fa-key"></i>
+                                        </div>
+                                        <span>Đổi mật khẩu</span>
+                                    </a>
+                                </li>
                                 <li>
                                     <a href="<?= esc_url( wp_logout_url( home_url() ) ) ?>">
                                         <div class="icon">
@@ -150,7 +155,7 @@
                 </div>
 
             </div>
-            <div class="notice-pc text-center mb-3">Lưu hoặc nhớ ngay link rút gọn <b><font color="#FFA500" style="font-size: 17px;">bit.ly/hh3d</font></b> để truy cập sẽ tự chuyển đến tên miền mới  khi nhà mạng chặn</div>
+            <!-- <div class="notice-pc text-center mb-3">Lưu hoặc nhớ ngay link rút gọn <b><font color="#FFA500" style="font-size: 17px;">bit.ly/hh3d</font></b> để truy cập sẽ tự chuyển đến tên miền mới  khi nhà mạng chặn</div> -->
         </div>
     </header>
     <div class="navbar-container">
@@ -209,6 +214,16 @@
 </div>
 <div class="container-fluid halim-full-player hidden halim-centered">
     <div id="halim-full-player" class="container col-md-offset-2s col-md-8"></div>
+</div>
+<div class="custom-confirm-overlay" style="display: none;">
+    <div class="custom-confirm-modal">
+        <h2 class="custom-confirm-title">Xác nhận xóa</h2>
+        <p class="custom-confirm-text">Bạn có chắc chắn muốn xóa lịch sử này?</p>
+        <div class="custom-confirm-actions">
+            <button class="custom-confirm-cancel">Hủy</button>
+            <button class="custom-confirm-confirm">Xóa</button>
+        </div>
+    </div>
 </div>
 <div class="container">
     <div class="row container" id="wrapper">

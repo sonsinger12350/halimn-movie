@@ -39,7 +39,7 @@ class HaLim_Advanced_Widget extends WP_Widget {
 				<div class="showtime-tabs">
 					<div class="tabs">
 						<a href="/" class="active">Mới cập nhật</a>
-						<a href="#collapseShowtime" data-toggle="collapse" class="active">Lịch chiếu</a>
+						<a href="#collapseShowtime" data-toggle="collapse">Lịch chiếu</a>
 					</div>
 				</div>
 				<div class="collapse mt-2" id="collapseShowtime">

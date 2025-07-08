@@ -20,10 +20,18 @@ get_header();?>
 				<a href="#" class="clear-history" id="delete-history-user"><i class="fas fa-trash"></i> Xóa tất cả</a>
 			</div>
 		</div>
+		<?php if (!is_user_logged_in()): ?>
+			<div class="alert-box">
+				<strong>Chú ý:</strong> Bạn cần 
+				<a href="javascript:void(0)" onclick="showModalLogin()">
+					<b>Đăng Nhập</b>
+				</a> tài khoản để lưu lịch sử xem phim. Nếu không, lịch sử sẽ mất khi bạn xóa bộ nhớ trình duyệt!
+			</div>
+		<?php endif; ?>
 		<div class="search-container"><input type="text" class="search-input" placeholder="Tìm kiếm phim trong lịch sử..." id="history-search"></div>
 		<?php
 		if (is_user_logged_in()) $history = get_user_meta(get_current_user_id(), 'halim_watch_history', true);
-		else $history = isset( $_COOKIE['halim_recent_posts'] ) ? json_decode( $_COOKIE['halim_recent_posts'], true ) : null;
+		else $history = isset( $_COOKIE['halim_recent_posts'] ) ? json_decode( stripslashes($_COOKIE['halim_recent_posts']), true ) : null;
 
 		if (!empty($history)) {
 			echo '<div class="history-grid">';
@@ -34,21 +42,22 @@ get_header();?>
 				$time = $item['time'];
 
 				$post = get_post($post_id);
-				if (!$post) continue;
+				if (!$post || $post->post_status != 'publish') continue;
 
 				$title = esc_html($post->post_title);
-				$meta = get_post_meta($post->ID, '_halim_metabox_options', true);
+				$meta = get_post_meta($post_id, '_halim_metabox_options', true);
 				$org_title = isset($meta['halim_original_title']) ? $meta['halim_original_title'] : '';
-				$thumbnail = isset($meta['halim_thumb_url']) ? $meta['halim_thumb_url'] : '';
-				$post_slug = cs_get_option("halim_watch_url") . '-' . basename(get_permalink($post->ID));
+				$post_slug = cs_get_option("halim_watch_url") . '-' . basename(get_permalink($post_id));
 				$watch_link = home_url("/") . "$post_slug/$episode-sv$server.html";
+				$image_url = get_the_post_thumbnail_url( $post_id, 'thumbnail' );
+				$metaPost = get_post_meta($post_id, "_halimmovies", true);
+    			$dataPlayer = json_decode(stripslashes($metaPost), true);
 
-				if (has_post_thumbnail($post->ID)) {
-					$image_id = get_post_thumbnail_id($post->ID);
-					$image_url = wp_get_attachment_image_src($image_id, 'movie-thumb');
-					$image_url = $image_url[0];
-				} else {
-					$image_url = $thumbnail;
+				foreach ($dataPlayer[$server]["halimmovies_server_data"] as $key => $value) {
+					if ($value['halimmovies_ep_slug'] == $episode) {
+						$episodeTitle = $value['halimmovies_ep_name'];
+						break;
+					}
 				}
 			?>
 				<div class="history-card">
@@ -59,7 +68,7 @@ get_header();?>
 						<div class="history-info">
 							<div class="history-info-title"><?= $title ?></div>
 							<div class="history-info-episode">
-								<i class="fas fa-play"></i> Đã xem Tập <?= esc_html($episode) ?>
+								<i class="fas fa-play"></i> Đã xem <?= esc_html($episodeTitle) ?>
 							</div>
 							<div class="history-info-time">
 								<i class="fas fa-clock"></i> <?= getDateDiff(date('Y-m-d H:i:s', $time)) ?>
@@ -107,37 +116,46 @@ get_header();?>
 			}
 		});
 
-		$('body').on('click', '.delete-history', function() {
+		$('body').on('click', '.delete-history', function(e) {
+			e.preventDefault();
+
 			let post_id = $(this).attr('data-id');
 			let item = $(this).closest('.history-card');
 
 			if (!post_id) return false;
-			if (!confirm("Bạn có chắc muốn xóa phim này lịch sử?")) return;
 
-			$.ajax({
-				url: halim.ajax_url,
-				type: "POST",
-				data: {
-					action: "delete_history",
-					nonce: '<?= wp_create_nonce('delete_history_nonce') ?>',
-					post_id
-				},
-				success: function(rs) {
-					if (rs.success) {
-						item.remove();
-						createToast({
-							type: "success",
-							text: "Đã xóa khỏi lịch sử"
-						});
-					}
-					else {
-						createToast({
-							type: "error",
-							text: "Có lỗi, vui lòng thử lại!"
-						});
-					}
+			showCustomConfirm({
+				title: 'Xác nhận xóa lịch sử xem phim',
+				message: 'Bạn có chắc muốn xóa lịch sử xem phim này?',
+				confirmText: 'Xóa',
+				cancelText: 'Hủy',
+				onConfirm: function () {
+					$.ajax({
+						url: halim.ajax_url,
+						type: "POST",
+						data: {
+							action: "delete_history",
+							nonce: '<?= wp_create_nonce('delete_history_nonce') ?>',
+							post_id
+						},
+						success: function(rs) {
+							if (rs.success) {
+								item.remove();
+								createToast({
+									type: "success",
+									text: "Đã xóa khỏi lịch sử"
+								});
+							}
+							else {
+								createToast({
+									type: "error",
+									text: "Có lỗi, vui lòng thử lại!"
+								});
+							}
+						}
+					});
 				}
-			});
+			})
 		});
 
 		$('body').on('click', '#delete-history-user', function() {
