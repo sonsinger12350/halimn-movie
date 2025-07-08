@@ -202,7 +202,7 @@ if (!post_password_required($post->ID) && $load) {
                 echo apply_filters("wpdiscuz_form_render", $output, $commentsCount, $currentUser);
                 if (empty($currentUser->ID) && !$form->isUserCanComment($currentUser, $post->ID)) {
                     ?>
-                    <div class="wpd-login-to-comment"><?php esc_html_e($wpdiscuz->options->getPhrase("wc_login_to_comment")); ?></div>
+                    <div class="wpd-login-to-comment"><button type="button" class="btn btn-danger" onclick="showModalLogin()"><?php esc_html_e($wpdiscuz->options->getPhrase("wc_login_to_comment")); ?></button></div>
                     <?php
                 }
                 ?>
