@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="<?= get_stylesheet_directory_uri() ?>/assets/css/bootstrap-style.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
     <link rel="stylesheet" href="<?= get_stylesheet_directory_uri() ?>/assets/css/custom.css?v=<?= time() ?>"/>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
 </head>
 <?php
     global $post;

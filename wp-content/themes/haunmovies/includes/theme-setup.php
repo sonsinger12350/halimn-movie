@@ -141,6 +141,7 @@ function halim_enqueue_scripts()
     wp_localize_script("ajax-auth-script", "ajax_auth_object", ["ajaxurl" => HALIM_THEME_URI . "/halim-ajax.php", "redirecturl" => home_url(), "loadingmessage" => __("Sending user info, please wait...", "halimthemes"), "sitekey" => cs_get_option("recaptcha_site_key"), "languages" => ["login" => __("Login", "halimthemes"), "register" => __("Register", "halimthemes"), "forgotpassword" => __("Lost your password?", "halimthemes"), "already_account" => __("Already have an account?", "halimthemes"), "create_account" => __("Create account", "halimthemes"), "reset_captcha" => __("Reset captcha", "halimthemes"), "username" => __("Username", "halimthemes"), "email" => __("Email", "halimthemes"), "username_email" => __("Username or Email", "halimthemes"), "password" => __("Password", "halimthemes"), "reset_password" => __("Reset Password", "halimthemes"), "login_with" => __("Login with", "halimthemes"), "register_with" => __("Register with", "halimthemes"), "or" => __("or", "halimthemes")]]);
     wp_enqueue_script('toast-js', HALIM_THEME_URI . '/assets/js/toast.min.js', [], '1.1', true);
     wp_enqueue_script('halim-custom', HALIM_THEME_URI . '/assets/js/custom.js', [], time(), true);
+
 }
 function halim_add_fb_scripts()
 {

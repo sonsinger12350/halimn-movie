@@ -922,4 +922,42 @@ a.bg-lochinvar:hover {
     border-radius: 12px;
     position: relative;
 }
+
+
+#wpdcom .wpd-form .wpdiscuz-textarea-wrap textarea, 
+#wpdcom textarea.wc_comment {
+    padding-left: 40px;
+}
+
+.halim-comments {
+    background: #202020;
+}
+
+.halim-comments .open-emoji-picker {
+    position: absolute;
+    top: 16px;
+    left: 15px;
+    font-size: 18px;
+    color: #fff;
+}
+
+.halim-comments .block-emoji-picker {
+	display: none;
+	position: absolute;
+	z-index: 1;
+	max-width: 100%;
+}
+
+.halim-comments .block-emoji-picker emoji-picker {
+	max-width: 100%;
+}
+
+.halim-comments .block-emoji-picker.show {
+	display: block;
+}
+
+.halim-comments #wpdcom .wpd-tools-actions {
+	right: 0%;
+    left: unset;
+}
 /* End of Halimn comments */

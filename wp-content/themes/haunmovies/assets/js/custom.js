@@ -160,6 +160,7 @@ $(document).ready(function() {
 		let post = btn.closest('.last').attr('data-id');
 
 		btn.attr('disabled', true);
+		btn.find('.follow-btn').html('<i class="fa fa-spinner fa-spin"></i>');
 
 		if (!post) {
 			createToast({
@@ -245,6 +246,8 @@ $(document).ready(function() {
 	$('#custom-login-form').on('submit', function(e) {
 		e.preventDefault();
 
+		let btn = $(this).find('button[type="submit"]');
+		let btnText = btn.html();
 		let nonce = $(this).find('input[name="nonce"]').val();
 		let username = $(this).find('input[name="username"]').val();
 		let password = $(this).find('input[name="password"]').val();
@@ -258,6 +261,9 @@ $(document).ready(function() {
 			return false;
 		}
 
+		btn.attr('disabled', true);
+		btn.html('<i class="fa fa-spinner fa-spin"></i>');
+
 		$.ajax({
 			url: halim.ajax_url,
 			type: "POST",
@@ -269,6 +275,8 @@ $(document).ready(function() {
 				remember: remember
 			},
 			success: function(rs) {
+				btn.html(btnText);
+
 				if (rs.success) {
 					createToast({
 						type: "success",
@@ -279,6 +287,7 @@ $(document).ready(function() {
 					}, 1000);
 				}
 				else {
+					btn.attr('disabled', false);
 					createToast({
 						type: "error",
 						text: "Đăng nhập thất bại"
@@ -287,4 +296,59 @@ $(document).ready(function() {
 			}
 		});
 	});
+
+	// EmojiPicker
+	$('body').on('click', '.open-emoji-picker', function() {
+		let parent = $(this).parent();
+
+		parent.find('.block-emoji-picker').toggleClass('show');
+	});
+
+	$('body').on('emoji-click', 'emoji-picker', function(event) {
+		let comment = $(this).closest('.wpd-textarea-wrap').find('[name="wc_comment"]');
+
+		comment.val(comment.val() + event.detail.unicode);
+	});
+
+	$(document).click(function(e) {
+		if (!$(e.target).closest('.block-emoji-picker').length && !$(e.target).closest('.open-emoji-picker').length) {
+			$('.block-emoji-picker').removeClass('show');
+		}
+	});
+
+	// End of EmojiPicker
+
+	// Delete comment
+	$('body').on('click', '.wpd_delete_btn', function() {
+		let commentId = $(this).attr('data-commentid');
+		let nonce = $(this).attr('data-nonce');
+		let comment = $(this).closest('.comment');
+
+		$.ajax({
+			url: halim.ajax_url,
+			type: "POST",
+			data: {
+				action: "halim_delete_comment",
+				nonce: nonce,
+				comment_id: commentId
+			},
+			success: function(rs) {
+				if (rs.success) {
+					$(this).closest('.wpd-comment-right').remove();
+					createToast({
+						type: "success",
+						text: "Đã xóa bình luận"
+					});
+					comment.fadeOut(300);
+				}
+				else {
+					createToast({
+						type: "error",
+						text: "Có lỗi, vui lòng thử lại"
+					});
+				}
+			}
+		});
+	});
+	// End of Hide comment
 });

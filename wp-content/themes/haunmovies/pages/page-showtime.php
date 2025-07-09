@@ -282,6 +282,191 @@
 		color: var(--secondary-color);
 	}
 
+	.early-schedule {
+		margin-bottom: 30px;
+		padding: 25px;
+		background: var(--gradient-card);
+		border-radius: 15px;
+		border: 1px solid var(--border-light);
+		box-shadow: var(--shadow-strong);
+		display: none;
+		position: relative;
+		overflow: hidden
+	}
+
+	.early-schedule.active {
+		display: block
+	}
+
+	.early-schedule:after {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 200%;
+		height: 100%;
+		background: linear-gradient(90deg,#fff0 0%,rgb(255 255 255/.03) 50%,#fff0 100%);
+		animation: shimmer var(--shimmer-speed) infinite;
+		pointer-events: none
+	}
+
+	.early-schedule h2 {
+		text-align: center;
+		margin-bottom: 25px;
+		font-size: 22px;
+		color: var(--accent-gold);
+		text-transform: uppercase;
+		position: relative;
+		display: inline-block;
+		left: 50%;
+		transform: translateX(-50%);
+		padding-bottom: 10px
+	}
+
+	.early-schedule h2:after {
+		content: "";
+		position: absolute;
+		bottom: 0;
+		left: 10%;
+		width: 80%;
+		height: 2px;
+		background: var(--gradient-secondary);
+		background-size: 200% 200%;
+		animation: borderShimmer 5s ease infinite;
+		border-radius: 2px
+	}
+
+	.early-schedule h2 i {
+		margin-right: 10px;
+		font-size: 20px;
+		vertical-align: middle;
+		color: var(--accent-gold)
+	}
+
+	.early-schedule .schedule-items {
+		display: grid;
+		gap: 20px;
+		position: relative;
+		z-index: 1
+	}
+
+	.early-schedule .schedule-item {
+		display: flex;
+		gap: 15px;
+		padding: 15px;
+		background: var(--gradient-item);
+		border-radius: 10px;
+		border: 1px solid var(--border-light);
+		text-decoration: none;
+		color: var(--text-primary);
+		transition: all var(--transition-speed) ease;
+		position: relative;
+		overflow: hidden;
+		margin-bottom: 0
+	}
+
+	.early-schedule .schedule-item:before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: -100%;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(90deg,transparent,rgb(0 198 255/.1),transparent);
+		transition: left .8s ease;
+		z-index: 0
+	}
+
+	.early-schedule .schedule-item:hover {
+		transform: translateY(-5px);
+		border-color: var(--secondary-color);
+		box-shadow: 0 8px 25px var(--glow-secondary)
+	}
+
+	.early-schedule .schedule-item:hover:before {
+		left: 100%
+	}
+
+	.early-schedule .schedule-item img {
+		width: 65px;
+		height: 90px;
+		object-fit: cover;
+		border-radius: 8px;
+		z-index: 1;
+		transition: all var(--transition-speed) ease;
+		border: 2px solid #fff0
+	}
+
+	.early-schedule .schedule-item:hover img {
+		border-color: var(--secondary-color);
+		box-shadow: 0 0 15px rgb(255 62 111/.4)
+	}
+
+	.early-schedule .schedule-info {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		z-index: 1
+	}
+
+	.early-schedule .schedule-title {
+		margin: 0;
+		font-size: 16px;
+		font-weight: 600;
+		color: var(--text-primary);
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		transition: color var(--transition-speed) ease
+	}
+
+	.early-schedule .schedule-item:hover .schedule-title {
+		color: var(--primary-color)
+	}
+
+	.early-schedule .schedule-episode {
+		color: var(--text-muted);
+		font-size: 13px;
+		margin-top: 8px;
+		display: flex;
+		align-items: center;
+		gap: 6px
+	}
+
+	.early-schedule .schedule-episode i {
+		font-size: 12px;
+		color: var(--primary-color);
+		transition: color var(--transition-speed) ease
+	}
+
+	.early-schedule .schedule-episode span {
+		color: var(--primary-color);
+		font-weight: 600;
+		transition: color var(--transition-speed) ease
+	}
+
+	.early-schedule .schedule-item:hover .schedule-episode i,.early-schedule .schedule-item:hover .schedule-episode span {
+		color: var(--secondary-color)
+	}
+
+	.early-time-sticker {
+		position: absolute;
+		top: -10px;
+		left: -10px;
+		background: var(--accent-gold);
+		color: #000;
+		padding: 6px 12px;
+		border-radius: 0 8px 8px 0;
+		font-size: 14px;
+		font-weight: 700;
+		z-index: 3;
+		transform: rotate(-10deg);
+		box-shadow: 0 4px 8px rgb(0 0 0/.3);
+		text-shadow: 0 1px 1px rgb(255 255 255/.3)
+	}
+
 	@media (max-width: 1024px) {
 		.schedule-grid {
 			grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -290,6 +475,10 @@
 
 		.page-title {
 			font-size: 24px;
+		}
+
+		.early-schedule {
+			padding: 20px
 		}
 	}
 
@@ -315,24 +504,44 @@
 			min-width: 70px;
 		}
 
+		.early-schedule {
+			padding: 15px
+		}
+
+		.early-schedule h2 {
+			font-size: 18px;
+			margin-bottom: 20px
+		}
+
+		.early-schedule .schedule-items {
+			grid-template-columns: 1fr!important
+		}
+
 		.schedule-grid {
 			grid-template-columns: 1fr;
 			padding: 15px;
 			gap: 15px;
 		}
 
-		.schedule-grid .schedule-item  {
+		.schedule-grid .schedule-item,.early-schedule .schedule-item {
 			padding: 12px;
-			gap: 12px;
+			gap: 12px
 		}
 
-		.schedule-grid .schedule-item img {
+		.schedule-grid .schedule-item img,.early-schedule .schedule-item img {
 			width: 55px;
-			height: 75px;
+			height: 75px
 		}
 
-		.schedule-grid .schedule-title {
-			font-size: 14px;
+		.schedule-grid .schedule-title,.early-schedule .schedule-title {
+			font-size: 14px
+		}
+
+		.early-time-sticker {
+			top: -8px;
+			left: -8px;
+			padding: 4px 8px;
+			font-size: 12px
 		}
 	}
 </style>
@@ -350,44 +559,91 @@
 			<?php endforeach; ?>
 		</div>
 		<div class="halim_box">
-		<?php
-			$args = array(
-				'post_type'			=> 'post',
-				'post_status' 		=> 'publish',
-				'meta_query'     => array(
-					array(
-						'key'     => 'halim_showtime_movies',
-						'value'   => $day,
-						'compare' => 'LIKE',
-					),
-				),
-			);
-
-			$wp_query = new WP_Query( $args );
-			$number = 1;
-
-			?>
-			<div class="schedule-grid" id="scheduleGrid">
 			<?php
-				if ($wp_query->have_posts()) : while ($wp_query->have_posts()) : $wp_query->the_post();
-					global $post;
+				$args = array(
+					'post_type'   => 'post',
+					'post_status' => 'publish',
+					'meta_query'  => array(
+						array(
+							'key'     => 'halim_showtime_movies',
+							'value'   => $day,
+							'compare' => 'LIKE',
+						),
+					),
+					'posts_per_page' => -1,
+				);
 
-					$meta = get_post_meta($post->ID, '_halim_metabox_options', true );
-					$post_title = $post->post_title;
+				$wp_query = new WP_Query($args);
+				$early_movies = [];
+				$normal_movies = [];
+
+				if ($wp_query->have_posts()) {
+					while ($wp_query->have_posts()) {
+						$wp_query->the_post();
+						global $post;
+
+						$meta = get_post_meta($post->ID, '_halim_metabox_options', true);
+						$metaShowtime = get_post_meta($post->ID, 'halim_showtime_movies', true);
+						$is_early = !empty($metaShowtime['halim_is_early_show']) && $metaShowtime['halim_is_early_show'] == 'true';
+
+						if ($is_early) $early_movies[] = $post;
+						else $normal_movies[] = $post;
+					}
+					wp_reset_postdata();
+				}
+
 				?>
-					<a href="<?= $post->guid ?>" class="schedule-item">
-						<img src="<?= get_the_post_thumbnail_url( $post->ID, 'medium' ); ?>" alt="<?= $post_title ?>" loading="lazy">
-						<div class="schedule-info">
-							<h3 class="schedule-title"><?= $post_title ?></h3>
-							<div class="schedule-episode">
-								<i class="fas fa-film"></i>
-								<span><?= $meta['halim_episode'] ?></span>
-							</div>
+
+				<?php if (!empty($early_movies)): ?>
+					<div class="early-schedule active" id="earlySchedule" style="opacity: 1; transform: translateY(0px); transition: opacity 0.3s, transform 0.3s;">
+						<h2>
+							<i class="fas fa-star"></i> Phim Chiếu Sớm
+						</h2>
+						<div class="schedule-items" style="grid-template-columns: 1fr 1fr;">
+							<?php foreach ($early_movies as $post): setup_postdata($post);
+								$meta = get_post_meta($post->ID, '_halim_metabox_options', true);
+								$metaShowtime = get_post_meta($post->ID, 'halim_showtime_movies', true);
+							?>
+								<a href="<?= esc_url(get_permalink()); ?>" class="schedule-item">
+									<img src="<?= esc_url(get_the_post_thumbnail_url($post->ID, 'medium')); ?>" alt="<?= esc_attr(get_the_title()); ?>" loading="lazy">
+									<div class="schedule-info">
+										<h3 class="schedule-title"><?= esc_html(get_the_title()); ?></h3>
+										<div class="schedule-episode">
+											<i class="fas fa-film"></i>
+											<span><?= esc_html($meta['halim_episode'] ?? ''); ?></span>
+										</div>
+									</div>
+									<?php if (!empty($metaShowtime['halim_showtime_time'])): ?>
+										<div class="early-time-sticker">
+											<span><?= esc_html($metaShowtime['halim_showtime_time']); ?></span>
+										</div>
+									<?php endif; ?>
+								</a>
+							<?php endforeach; wp_reset_postdata(); ?>
 						</div>
-					</a>
-				<?php endwhile; wp_reset_postdata(); endif; ?>
+					</div>
+				<?php endif; ?>
+
+				<?php if (!empty($normal_movies)): ?>
+					<div class="schedule-grid">
+						<?php foreach ($normal_movies as $post): setup_postdata($post);
+							$meta = get_post_meta($post->ID, '_halim_metabox_options', true);
+						?>
+							<a href="<?= esc_url(get_permalink()); ?>" class="schedule-item">
+								<img src="<?= esc_url(get_the_post_thumbnail_url($post->ID, 'medium')); ?>" alt="<?= esc_attr(get_the_title()); ?>" loading="lazy">
+								<div class="schedule-info">
+									<h3 class="schedule-title"><?= esc_html(get_the_title()); ?></h3>
+									<div class="schedule-episode">
+										<i class="fas fa-film"></i>
+										<span><?= esc_html($meta['halim_episode'] ?? ''); ?></span>
+									</div>
+								</div>
+							</a>
+						<?php endforeach; wp_reset_postdata(); ?>
+					</div>
+				<?php endif; ?>
 			</div>
-		</div>
+
 	</section>
 	<?php if ( is_active_sidebar( 'halim-ad-below-category' ) ) { ?>
 	    <div class="a--d-wrapper" style="text-align: center; margin: 10px 0;">

@@ -349,16 +349,29 @@ $options[] = array(
     array(
       'fields' => array(
         array(
-          'id'    => 'halim_showtime_movies',
-          'type'  => 'checkbox',
-          'title' => __('Showtime movies', 'halimthemes'),
-          'class' => 'horizontal',
+          'id'      => 'halim_showtime_movies',
+          'type'    => 'checkbox',
+          'title'   => __('Showtime movies', 'halimthemes'),
+          'class'   => 'horizontal',
           'options' => list_showtime()
+        ),
+        array(
+          'id'    => 'halim_is_early_show',
+          'type'  => 'checkbox',
+          'title' => __('Chiếu sớm', 'halimthemes'),
+          'label' => __('Phim chiếu sớm', 'halimthemes'),
+        ),
+        array(
+          'id'    => 'halim_showtime_time',
+          'type'  => 'text',
+          'title' => __('Giờ chiếu', 'halimthemes'),
+          'desc'  => __('Nhập giờ chiếu định dạng HH:MM', 'halimthemes'),
         ),
       )
     )
   )
 );
+
 
 
 CSFramework_Metabox::instance( $options );

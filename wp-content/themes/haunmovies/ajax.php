@@ -179,10 +179,24 @@ add_action('wp_ajax_nopriv_halim_follow_movie', 'handle_halim_follow_movie');
 
 function handle_halim_follow_movie() {
     if (!wp_verify_nonce($_POST['nonce'], 'follow_movie_nonce')) wp_send_json_error(['message' => 'Xác thực không hợp lệ']);
-    if (empty($_POST["post_id"])) wp_send_json_error(['message' => 'Thiếu thông tin']);
+    if (empty($_POST["post_id"]) && empty($_POST["clear_all"])) wp_send_json_error(['message' => 'Thiếu thông tin']);
 
     $post_id = isset($_POST["post_id"]) ? absint($_POST["post_id"]) : 0;
     $user_id = get_current_user_id();
+
+    if (!empty($_POST["clear_all"])) {
+        if ( is_user_logged_in() ) {
+            delete_user_meta($user_id, 'halim_followed_movies');
+        }
+        else {
+            setcookie('halim_followed_movies', '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN);
+        }
+
+        wp_send_json_success([
+            'message' => 'Đã xóa tất cả phim theo dõi',
+            'action' => 'clear_all'
+        ]);
+    }
 
     if ( is_user_logged_in() ) $followed_movies = get_user_meta($user_id, 'halim_followed_movies', true);
     else $followed_movies = isset($_COOKIE['halim_followed_movies']) ? json_decode($_COOKIE['halim_followed_movies'], true) : [];
@@ -360,6 +374,34 @@ function halim_user_login() {
     wp_send_json_success(['message' => 'Đăng nhập thành công']);
 }
 
+add_action('wp_ajax_halim_delete_comment', 'halim_delete_comment');
+add_action('wp_ajax_nopriv_halim_delete_comment', 'halim_delete_comment');
 
+function halim_delete_comment() {
+    if (!wp_verify_nonce($_POST['nonce'], 'halim_delete_comment')) wp_send_json_error(['message' => 'Xác thực không hợp lệ']);
 
+    $comment_id = isset($_POST['comment_id']) ? intval($_POST['comment_id']) : 0;
+    if (!$comment_id) wp_send_json_error(['message' => 'Thiếu thông tin']);
+
+    wp_delete_comment($comment_id, true);
+    delete_comment_and_children($comment_id);
+
+    wp_send_json_success(['message' => 'Đã xóa bình luận']);
+}
+
+function delete_comment_and_children($comment_id) {
+    $children = get_comments([
+        'parent'  => $comment_id,
+        'status'  => 'all',
+        'orderby' => 'comment_ID',
+        'order'   => 'ASC',
+        'number'  => 0,
+    ]);
+
+    foreach ($children as $child) {
+        delete_comment_and_children($child->comment_ID); // Đệ quy
+    }
+
+    wp_delete_comment($comment_id, true); // true để xóa vĩnh viễn
+}
 ?>

@@ -17,7 +17,7 @@ get_header();?>
 		<div class="section-bar clearfix">
 			<div class="section-title d-flex justify-content-between">
 				<span><?php echo __( 'Lịch sử xem phim' ); ?></span>
-				<a href="#" class="clear-history" id="delete-history-user"><i class="fas fa-trash"></i> Xóa tất cả</a>
+				<a href="javascript:void(0)" class="clear-history" id="delete-history-user"><i class="fas fa-trash"></i> Xóa tất cả</a>
 			</div>
 		</div>
 		<?php if (!is_user_logged_in()): ?>

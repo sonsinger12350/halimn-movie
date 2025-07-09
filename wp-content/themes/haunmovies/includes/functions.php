@@ -78,11 +78,11 @@ if (!function_exists("halim_player_box")) {
             echo "                    <div id=\"toggle-light\"><i class=\"hl-adjust\"></i>\r\n                        ";
             _e("Light Off", "halimthemes");
             echo "                    </div>\r\n                    ";
-            if (get_option("halim_report_enable")) {
+            // if (get_option("halim_report_enable")) {
                 echo "                    <div id=\"report\" class=\"halim-switch\"><i class=\"hl-attention\"></i> ";
                 _e("Report", "halimthemes");
                 echo "</div>\r\n                    ";
-            }
+            // }
             echo "                    <div class=\"luotxem\"><i class=\"hl-eye\"></i>\r\n                        <span>";
             echo halim_display_post_view_count($post->ID);
             echo "</span> ";
@@ -1141,146 +1141,6 @@ add_filter('show_admin_bar', function($show) {
         return false;
     }
     return $show;
-});
-
-add_action('add_meta_boxes', function () {
-    add_meta_box(
-        'custom_related_movie',
-        'Liên kết phim',
-        'render_custom_related_movie',
-        'post', // ← post thường
-        'normal',
-        'default'
-    );
-});
-
-function render_custom_related_movie($post) {
-    $values = get_post_meta($post->ID, '_custom_related_movie', true);
-    wp_nonce_field('save_custom_related_movie', 'custom_related_movie_nonce');
-
-    $posts = get_posts([
-        'post_type' => 'post',
-        'posts_per_page' => -1,
-        'orderby' => 'title',
-        'order' => 'ASC'
-    ]);
-
-    $used_ids = [];
-
-    ?>
-    <style>
-        #custom-repeatable-fields .repeatable-item {
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            padding: 10px;
-            background: #f9f9f9;
-            display: flex;
-            align-items: center;
-            gap: 24px;
-        }
-        #custom-repeatable-fields .remove-item {
-            color: #b32d2e;
-            text-decoration: none;
-        }
-        #custom-repeatable-fields input,
-        #custom-repeatable-fields select {
-            width: 100%;
-        }
-    </style>
-
-    <div id="custom-repeatable-fields">
-        <?php if (!empty($values) && is_array($values)) : ?>
-            <?php foreach ($values as $index => $item): ?>
-                <?php $used_ids[] = $item['post_id'] ?? 0; ?>
-                <div class="repeatable-item">
-                    <a href="javascript:void(0)" class="remove-item"><span class="dashicons dashicons-remove"></span></a>
-                    <input type="text" name="custom_related_movie[<?= $index ?>][title]" value="<?= esc_attr($item['title'] ?? '') ?>" placeholder="Tiêu đề" />
-                    <select name="custom_related_movie[<?= $index ?>][post_id]">
-                        <option value="">Chọn phim</option>
-                        <?php foreach ($posts as $p): ?>
-                            <?php
-                            $selected_id = $item['post_id'] ?? '';
-                            $disabled = (in_array($p->ID, $used_ids) && $p->ID != $selected_id) ? 'disabled' : '';
-                            ?>
-                            <option value="<?= $p->ID ?>" <?= selected($selected_id, $p->ID, false) ?> <?= $disabled ?>>
-                                <?= esc_html($p->post_title) ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-            <?php endforeach; ?>
-        <?php endif; ?>
-    </div>
-
-    <button class="button" id="add-new-item">Thêm phần mới</button>
-
-    <script>
-    jQuery(function($){
-        let index = $('#custom-repeatable-fields .repeatable-item').length || 0;
-
-        const allPosts = <?php echo json_encode(array_map(function($p){
-            return ['id' => $p->ID, 'title' => $p->post_title];
-        }, $posts)); ?>;
-
-        function getUsedPostIds() {
-            const ids = [];
-            $('#custom-repeatable-fields select').each(function() {
-                const val = $(this).val();
-                if (val) ids.push(parseInt(val));
-            });
-            return ids;
-        }
-
-        $('#add-new-item').on('click', function(e){
-            e.preventDefault();
-
-            const used = getUsedPostIds();
-            let options = '<option value="">Chọn phim</option>';
-            allPosts.forEach(function(post){
-                if (!used.includes(post.id)) {
-                    options += `<option value="${post.id}">${post.title}</option>`;
-                }
-            });
-
-            const html = `
-                <div class="repeatable-item">
-                    <a href="javascript:void(0)" class="remove-item"><span class="dashicons dashicons-remove"></span></a>
-                    <input type="text" name="custom_related_movie[${index}][title]" value="" placeholder="Tiêu đề" />
-                    <select name="custom_related_movie[${index}][post_id]">
-                        ${options}
-                    </select>
-                </div>`;
-            $('#custom-repeatable-fields').append(html);
-            index++;
-        });
-
-        $(document).on('click', '.remove-item', function(e){
-            e.preventDefault();
-            $(this).closest('.repeatable-item').remove();
-        });
-    });
-    </script>
-    <?php
-}
-
-add_action('save_post_post', function($post_id) {
-    if (!isset($_POST['custom_related_movie_nonce']) || !wp_verify_nonce($_POST['custom_related_movie_nonce'], 'save_custom_related_movie'))
-        return;
-
-    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
-        return;
-
-    if (!current_user_can('edit_post', $post_id))
-        return;
-
-    if (isset($_POST['custom_related_movie']) && is_array($_POST['custom_related_movie'])) {
-        $data = array_values(array_filter($_POST['custom_related_movie'], function($item){
-            return !empty($item['title']) || !empty($item['post_id']);
-        }));
-        update_post_meta($post_id, '_custom_related_movie', $data);
-    } else {
-        delete_post_meta($post_id, '_custom_related_movie');
-    }
 });
 
 ?>

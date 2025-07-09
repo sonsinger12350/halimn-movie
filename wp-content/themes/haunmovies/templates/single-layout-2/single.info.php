@@ -26,7 +26,6 @@
 	$countRate = get_post_meta($post->ID, "halim_users_num", true);
 	$rating = (!empty($rate) && !empty($countRate)) ? round($rate / $countRate, 2) : 0;
 	$categories = get_the_category();
-	$list_movie_follow = list_movie_follow();
 	$watch_url = cs_get_option('watch_btn_display') == 'first_episode' ? halim_get_first_episode_link($post->ID) : halim_get_last_episode_link($post->ID);
 
 	$showtime = get_post_meta($post->ID, 'halim_showtime_movies', true );
@@ -187,13 +186,13 @@
 			</a>
         </div>
         <div class="last" data-id="<?= $post->ID ?>">
-			<?php if (in_array($post->ID, $list_movie_follow)): ?>
-				<button id="follow-btn" class="button-default bg-lochinvar followed">
+			<?php if (in_array($post->ID, list_movie_follow())): ?>
+				<button type="button" id="follow-btn" class="button-default bg-lochinvar followed">
 					<i class="fa-sharp fa-solid fa-bookmark"></i>
 					<div class="follow-btn">Hủy Theo Dõi</div>
 				</button>
 			<?php else: ?>
-				<button id="follow-btn" class="button-default bg-lochinvar">
+				<button type="button" id="follow-btn" class="button-default bg-lochinvar">
 					<i class="fa-sharp fa-solid fa-bookmark"></i>
 					<div class="follow-btn">Theo Dõi</div>
 				</button>
