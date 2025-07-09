@@ -972,6 +972,10 @@ class Form {
                     id="wc-textarea-<?php echo esc_attr($uniqueId); ?>" <?php echo $commentTextLengthRange . ' ' . $textareaMaxLength; ?> placeholder="<?php echo esc_attr($textarea_placeholder); ?>"
                     aria-label="<?php echo esc_attr($textarea_placeholder); ?>" name="wc_comment"
                     class="wc_comment wpd-field"></textarea>
+                <a href="javascript:void(0)" class="open-emoji-picker"><i class="fa-regular fa-face-laugh"></i></a>
+                <div class="block-emoji-picker">
+                    <emoji-picker></emoji-picker>
+                </div>
             </div>
             <div class="wpd-editor-buttons-right">
                 <?php
