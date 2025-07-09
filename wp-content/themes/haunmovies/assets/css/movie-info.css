@@ -884,23 +884,36 @@ a.bg-lochinvar:hover {
     box-shadow: inset 1px 2px 8px rgba(0,0,0,.02)
 }
 
-#wpdcom .wpd-form .wpdiscuz-textarea-wrap textarea::-moz-placeholder {
-    line-height: 28px;
+#wpdcom .wpd-form .wpdiscuz-textarea-wrap textarea::placeholder {
+    line-height: 20px !important;
     color: #666;
-    font-size: 16px
+    font-size: 14px !important;
 }
 
 #wpdcom .wpd-form .wpdiscuz-textarea-wrap textarea::-webkit-input-placeholder {
-    line-height: 28px;
+    line-height: 20px !important;
     color: #666;
-    font-size: 16px
+    font-size: 14px !important;
+}
+
+#wpdcom .wpd-form .wpdiscuz-textarea-wrap textarea::-moz-placeholder {
+    line-height: 20px !important;
+    color: #666;
+    font-size: 14px !important;
 }
 
 #wpdcom .wpd-form .wpdiscuz-textarea-wrap textarea:-ms-input-placeholder {
-    line-height: 28px;
+    line-height: 20px !important;
     color: #666;
-    font-size: 16px
+    font-size: 14px !important;
 }
+
+#wpdcom .wpd-form .wpdiscuz-textarea-wrap textarea:-moz-placeholder {
+    line-height: 20px !important;
+    color: #666;
+    font-size: 14px !important;
+}
+
 
 #wpdcom .wpd-form-row .wpdiscuz-item input[type=text],#wpdcom .wpd-form-row .wpdiscuz-item input[type=email],#wpdcom .wpd-form-row .wpdiscuz-item input[type=url],#wpdcom .wpd-form-row .wpdiscuz-item input[type=color],#wpdcom .wpd-form-row .wpdiscuz-item input[type=date],#wpdcom .wpd-form-row .wpdiscuz-item input[type=datetime],#wpdcom .wpd-form-row .wpdiscuz-item input[type=datetime-local],#wpdcom .wpd-form-row .wpdiscuz-item input[type=month],#wpdcom .wpd-form-row .wpdiscuz-item input[type=number],#wpdcom .wpd-form-row .wpdiscuz-item input[type=time],#wpdcom textarea,#wpdcom select {
     background: #161616 !important;

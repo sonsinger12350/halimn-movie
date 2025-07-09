@@ -383,8 +383,8 @@ function halim_delete_comment() {
     $comment_id = isset($_POST['comment_id']) ? intval($_POST['comment_id']) : 0;
     if (!$comment_id) wp_send_json_error(['message' => 'Thiếu thông tin']);
 
-    wp_delete_comment($comment_id, true);
     delete_comment_and_children($comment_id);
+    wp_delete_comment($comment_id, true);
 
     wp_send_json_success(['message' => 'Đã xóa bình luận']);
 }
@@ -399,9 +399,9 @@ function delete_comment_and_children($comment_id) {
     ]);
 
     foreach ($children as $child) {
-        delete_comment_and_children($child->comment_ID); // Đệ quy
+        delete_comment_and_children($child->comment_ID);
     }
 
-    wp_delete_comment($comment_id, true); // true để xóa vĩnh viễn
+    wp_delete_comment($comment_id, true);
 }
 ?>
