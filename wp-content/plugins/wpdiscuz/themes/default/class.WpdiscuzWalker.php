@@ -387,7 +387,11 @@ class WpdiscuzWalker extends Walker_Comment implements WpDiscuzConstants {
         }
 
         $toolsActions .= apply_filters("wpdiscuz_comment_buttons", "", $comment, $user["user"], $args["current_user"]);
-        $toolsActions .= "<span class='wpd_delete_btn wpd-cta-button' data-commentid='" . $comment->comment_ID . "' data-nonce='" . wp_create_nonce("halim_delete_comment") . "'>Xóa</span>";
+
+        if ($user["user"]->ID == $args["current_user"]->ID) {
+            $toolsActions .= "<span class='wpd_delete_btn wpd-cta-button' data-commentid='" . $comment->comment_ID . "' data-nonce='" . wp_create_nonce("halim_delete_comment") . "'>Xóa</span>";
+        }
+
         $showTools    = false;
         if ($toolsActions) {
             $search[]  = "{TOOLS_WRAPPER_CLASSES}";
