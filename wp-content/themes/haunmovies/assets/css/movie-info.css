@@ -930,12 +930,11 @@ a.bg-lochinvar:hover {
 }
 
 #wpdcom .wpd-comment .wpd-comment-right {
-    background-color: #292929;
+    background-color: #171717;
     padding: 5px 15px;
     border-radius: 12px;
     position: relative;
 }
-
 
 #wpdcom .wpd-form .wpdiscuz-textarea-wrap textarea, 
 #wpdcom textarea.wc_comment {
@@ -967,6 +966,12 @@ a.bg-lochinvar:hover {
 
 .halim-comments .block-emoji-picker.show {
 	display: block;
+}
+
+.halim-comments #wpdcom .wpd-tools {
+    position: absolute;
+    right: 18px;
+    top: 18px;
 }
 
 .halim-comments #wpdcom .wpd-tools-actions {
