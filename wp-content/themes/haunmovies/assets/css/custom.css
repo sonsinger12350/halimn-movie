@@ -736,7 +736,8 @@ body *:not(i) {
 	flex: 1;
 }
 
-#halim-advanced-widget-2 .showtime .item.active {
+#halim-advanced-widget-2 .showtime .item.active,
+#halim-advanced-widget-2 .showtime .item:hover {
 	background: linear-gradient(140deg, rgba(0, 77, 102, .8) 0%, rgba(0, 134, 179, .9) 50%, rgba(0, 191, 255, 1) 100%);
 }
 

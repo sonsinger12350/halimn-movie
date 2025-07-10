@@ -555,95 +555,12 @@
 		<h1 class="page-title"> <i class="fas fa-film"></i> Lịch Chiếu</h1>
 		<div class="day-tabs">
 			<?php foreach ($showtime as $k => $v): ?>
-				<a href="/lich-chieu?day=<?= $k ?>" class="day-tab <?= $k == $day ? 'active' : '' ?>"><?= $v ?></a>
+				<a href="javascript:void(0)" data-day="<?= $k ?>" class="day-tab <?= $k == $day ? 'active' : '' ?>"><?= $v ?></a>
 			<?php endforeach; ?>
 		</div>
 		<div class="halim_box">
-			<?php
-				$args = array(
-					'post_type'   => 'post',
-					'post_status' => 'publish',
-					'meta_query'  => array(
-						array(
-							'key'     => 'halim_showtime_movies',
-							'value'   => $day,
-							'compare' => 'LIKE',
-						),
-					),
-					'posts_per_page' => -1,
-				);
-
-				$wp_query = new WP_Query($args);
-				$early_movies = [];
-				$normal_movies = [];
-
-				if ($wp_query->have_posts()) {
-					while ($wp_query->have_posts()) {
-						$wp_query->the_post();
-						global $post;
-
-						$meta = get_post_meta($post->ID, '_halim_metabox_options', true);
-						$metaShowtime = get_post_meta($post->ID, 'halim_showtime_movies', true);
-						$is_early = !empty($metaShowtime['halim_is_early_show']) && $metaShowtime['halim_is_early_show'] == 'true';
-
-						if ($is_early) $early_movies[] = $post;
-						else $normal_movies[] = $post;
-					}
-					wp_reset_postdata();
-				}
-
-				?>
-
-				<?php if (!empty($early_movies)): ?>
-					<div class="early-schedule active" id="earlySchedule" style="opacity: 1; transform: translateY(0px); transition: opacity 0.3s, transform 0.3s;">
-						<h2>
-							<i class="fas fa-star"></i> Phim Chiếu Sớm
-						</h2>
-						<div class="schedule-items" style="grid-template-columns: 1fr 1fr;">
-							<?php foreach ($early_movies as $post): setup_postdata($post);
-								$meta = get_post_meta($post->ID, '_halim_metabox_options', true);
-								$metaShowtime = get_post_meta($post->ID, 'halim_showtime_movies', true);
-							?>
-								<a href="<?= esc_url(get_permalink()); ?>" class="schedule-item">
-									<img src="<?= esc_url(get_the_post_thumbnail_url($post->ID, 'medium')); ?>" alt="<?= esc_attr(get_the_title()); ?>" loading="lazy">
-									<div class="schedule-info">
-										<h3 class="schedule-title"><?= esc_html(get_the_title()); ?></h3>
-										<div class="schedule-episode">
-											<i class="fas fa-film"></i>
-											<span><?= esc_html($meta['halim_episode'] ?? ''); ?></span>
-										</div>
-									</div>
-									<?php if (!empty($metaShowtime['halim_showtime_time'])): ?>
-										<div class="early-time-sticker">
-											<span><?= esc_html($metaShowtime['halim_showtime_time']); ?></span>
-										</div>
-									<?php endif; ?>
-								</a>
-							<?php endforeach; wp_reset_postdata(); ?>
-						</div>
-					</div>
-				<?php endif; ?>
-
-				<?php if (!empty($normal_movies)): ?>
-					<div class="schedule-grid">
-						<?php foreach ($normal_movies as $post): setup_postdata($post);
-							$meta = get_post_meta($post->ID, '_halim_metabox_options', true);
-						?>
-							<a href="<?= esc_url(get_permalink()); ?>" class="schedule-item">
-								<img src="<?= esc_url(get_the_post_thumbnail_url($post->ID, 'medium')); ?>" alt="<?= esc_attr(get_the_title()); ?>" loading="lazy">
-								<div class="schedule-info">
-									<h3 class="schedule-title"><?= esc_html(get_the_title()); ?></h3>
-									<div class="schedule-episode">
-										<i class="fas fa-film"></i>
-										<span><?= esc_html($meta['halim_episode'] ?? ''); ?></span>
-									</div>
-								</div>
-							</a>
-						<?php endforeach; wp_reset_postdata(); ?>
-					</div>
-				<?php endif; ?>
-			</div>
-
+			<?= show_showtime_movies($day); ?>
+		</div>
 	</section>
 	<?php if ( is_active_sidebar( 'halim-ad-below-category' ) ) { ?>
 	    <div class="a--d-wrapper" style="text-align: center; margin: 10px 0;">
@@ -652,3 +569,35 @@
 	<?php } ?>
 </main>
 <?php get_sidebar(); get_footer(); ?>
+<script>
+	$('body').on('click', '.day-tab', function() {
+		let btn = $(this);
+		let day = btn.attr('data-day');
+		
+		$.ajax({
+			url: halim.ajax_url,
+			type: "POST",
+			data: {
+				action: "halim_get_showtime_movies",
+				nonce: '<?= wp_create_nonce('halim_get_showtime_movies'); ?>',
+				day: day
+			},
+			success: function(rs) {
+				if (rs.success) {
+					$('.day-tab.active').removeClass('active');
+					btn.addClass('active');
+
+					$('.halim_box').fadeOut(300, function() {
+						$(this).html(rs.data.content).fadeIn(300);
+					});
+				}
+				else {
+					createToast({
+						type: "error",
+						text: rs.message
+					});
+				}
+			}
+		});
+	});
+</script>

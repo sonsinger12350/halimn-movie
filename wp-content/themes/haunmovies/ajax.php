@@ -404,4 +404,18 @@ function delete_comment_and_children($comment_id) {
 
     wp_delete_comment($comment_id, true);
 }
+
+add_action('wp_ajax_halim_get_showtime_movies', 'halim_get_showtime_movies');
+add_action('wp_ajax_nopriv_halim_get_showtime_movies', 'halim_get_showtime_movies');
+
+function halim_get_showtime_movies() {
+    if (!wp_verify_nonce($_POST['nonce'], 'halim_get_showtime_movies')) wp_send_json_error(['message' => 'Xác thực không hợp lệ']);
+
+    $day = isset($_POST['day']) ? sanitize_text_field($_POST['day']) : '';
+
+    if (empty($day)) wp_send_json_error(['message' => 'Thiếu thông tin']);
+
+    $content = show_showtime_movies($day);
+    wp_send_json_success(['content' => $content]);
+}
 ?>

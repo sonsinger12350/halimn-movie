@@ -811,16 +811,12 @@ a.bg-lochinvar:hover {
 }
 
 @media (max-width: 500px) {
-    .info-movie .head {
-        flex-direction: column;
-    }
-
     .info-movie .head .first {
-        width: 50%;
+        width: 40%;
     }
 
     .info-movie .head .last {
-        width: 100%;
+        width: 60%;
     }
 
     .movie-rating-modal {
