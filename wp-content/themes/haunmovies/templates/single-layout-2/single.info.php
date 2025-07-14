@@ -24,6 +24,7 @@
 	$the_title = cs_get_option('display_custom_title') ? halim_get_the_title($post->ID) : get_the_title($post->ID);
 	$rate = get_post_meta($post->ID, "halim_user_rate", true);
 	$countRate = get_post_meta($post->ID, "halim_users_num", true);
+	$countRate = !empty($countRate) ? $countRate : 0;
 	$rating = (!empty($rate) && !empty($countRate)) ? round($rate / $countRate, 2) : 0;
 	$categories = get_the_category();
 	$watch_url = cs_get_option('watch_btn_display') == 'first_episode' ? halim_get_first_episode_link($post->ID) : halim_get_last_episode_link($post->ID);

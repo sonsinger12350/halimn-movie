@@ -35,12 +35,6 @@ get_header();?>
 				);
 		        $args['tax_query'] = array(
 			        array(
-			            'taxonomy' => 'post_format',
-			            'field' => 'slug',
-			            'terms' => array('post-format-gallery', 'post-format-video', 'post-format-audio'),
-			            'operator' => 'IN'
-			        ),
-			        array(
 			            'taxonomy' => 'status',
 			            'field' => 'slug',
 			            'terms' => array('completed'),

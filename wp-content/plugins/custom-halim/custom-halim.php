@@ -430,3 +430,21 @@ add_filter('wpdiscuz_comment_text_after', function($html, $comment){
     }
     return $html;
 }, 10, 2);
+
+add_action('init', 'restrict_wp_admin_access');
+function restrict_wp_admin_access() {
+    // Kiểm tra nếu người dùng đã đăng nhập nhưng không phải admin
+    if (is_admin() && is_user_logged_in() && !current_user_can('administrator') && !defined('DOING_AJAX')) {
+        wp_redirect(home_url()); // Chuyển hướng về trang chủ
+        exit;
+    }
+}
+
+add_filter('nav_menu_link_attributes', 'remove_menu_link_title_attribute', 10, 3);
+function remove_menu_link_title_attribute($atts, $item, $args) {
+    // Nếu có title thì xóa nó đi
+    if (isset($atts['title'])) {
+        unset($atts['title']);
+    }
+    return $atts;
+}

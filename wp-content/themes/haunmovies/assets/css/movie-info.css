@@ -728,131 +728,6 @@ a.bg-lochinvar:hover {
     display: none !important;
 }
 
-@media(max-width: 767px) {
-    .info-movie .head .first {
-        width:28%
-    }
-
-    .info-movie .head .last {
-        width: 72%;
-        font-size: 12px;
-        margin-left: 5px
-    }
-
-    .info-movie .head .last>div {
-        padding: 2px
-    }
-
-    .info-movie .head .last>div>div:first-child {
-        display: none
-    }
-
-    .info-movie .head .last>div>div {
-        flex: 1
-    }
-
-    .halim-entry-box .item-content {
-        height:80px
-    }
-
-    .halim-entry-box .item-content.toggled {
-        height: auto
-    }
-
-    #halim-list-server li {
-        width: 25%;
-    }
-
-    .movie-rating-modal {
-        max-width: 450px;
-        width: 98%
-    }
-
-    .movie-rating-modal-header {
-        padding: 20px 15px
-    }
-
-    .movie-rating-movie-title {
-        font-size: 20px
-    }
-
-    .movie-rating-movie-rating {
-        font-size: 12px;
-        padding: 6px 12px
-    }
-
-    .movie-rating-modal-body {
-        padding: 20px 15px
-    }
-
-    .movie-rating-rating-title {
-        font-size: 16px;
-        margin-bottom: 15px
-    }
-
-    .movie-rating-modal-footer {
-        gap: 10px;
-        padding: 0 15px 20px
-    }
-
-    .movie-rating-rating-options {
-        gap: 10px;
-        margin-bottom: 20px
-    }
-
-    .movie-rating-rating-option {
-        padding: 10px 8px;
-    }
-
-    .movie-rating-btn {
-        font-size: 14px;
-        padding: 12px;
-    }
-}
-
-@media (max-width: 500px) {
-    .info-movie .head .first {
-        width: 40%;
-    }
-
-    .info-movie .head .last {
-        width: 60%;
-    }
-
-    .movie-rating-modal {
-        max-width: 400px;
-        width: 98%
-    }
-
-    .movie-rating-rating-options {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .movie-rating-rating-option {
-        flex-direction: row;
-        justify-content: flex-start;
-        padding: 10px
-    }
-
-    .movie-rating-rating-option img {
-        height: 35px;
-        margin-bottom: 0;
-        margin-right: 10px;
-        width: 35px
-    }
-
-    .movie-rating-rating-option-text {
-        font-size: 13px;
-        text-align: left
-    }
-}
-
-@media (max-width: 350px) {
-    #halim-list-server ul li span {
-        padding: 6px;
-    }
-}
-
 /* Halimn comments */
 #wpdcom {
     max-width: 100%;
@@ -975,3 +850,168 @@ a.bg-lochinvar:hover {
     left: unset;
 }
 /* End of Halimn comments */
+
+
+@media(max-width: 767px) {
+    .info-movie .head .first {
+        width:28%
+    }
+
+    .info-movie .head .last {
+        width: 72%;
+        font-size: 12px;
+        margin-left: 5px
+    }
+
+    .info-movie .head .last>div {
+        padding: 2px
+    }
+
+    .info-movie .head .last>div>div:first-child {
+        display: none
+    }
+
+    .info-movie .head .last>div>div {
+        flex: 1
+    }
+
+    .halim-entry-box .item-content {
+        height:80px
+    }
+
+    .halim-entry-box .item-content.toggled {
+        height: auto
+    }
+
+    #halim-list-server li {
+        width: 25%;
+    }
+
+    .movie-rating-modal {
+        max-width: 450px;
+        width: 98%
+    }
+
+    .movie-rating-modal-header {
+        padding: 20px 15px
+    }
+
+    .movie-rating-movie-title {
+        font-size: 20px
+    }
+
+    .movie-rating-movie-rating {
+        font-size: 12px;
+        padding: 6px 12px
+    }
+
+    .movie-rating-modal-body {
+        padding: 20px 15px
+    }
+
+    .movie-rating-rating-title {
+        font-size: 16px;
+        margin-bottom: 15px
+    }
+
+    .movie-rating-modal-footer {
+        gap: 10px;
+        padding: 0 15px 20px
+    }
+
+    .movie-rating-rating-options {
+        gap: 10px;
+        margin-bottom: 20px
+    }
+
+    .movie-rating-rating-option {
+        padding: 10px 8px;
+    }
+
+    .movie-rating-btn {
+        font-size: 14px;
+        padding: 12px;
+    }
+}
+
+@media (max-width: 500px) {
+    .movie-rating-modal {
+        max-width: 400px;
+        width: 98%
+    }
+
+    .movie-rating-rating-options {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .movie-rating-rating-option {
+        flex-direction: row;
+        justify-content: flex-start;
+        padding: 10px
+    }
+
+    .movie-rating-rating-option img {
+        height: 35px;
+        margin-bottom: 0;
+        margin-right: 10px;
+        width: 35px
+    }
+
+    .movie-rating-rating-option-text {
+        font-size: 13px;
+        text-align: left
+    }
+
+    .halim-rating-container {
+        padding:6px 10px
+    }
+
+    .halim-star-icon {
+        font-size: 18px
+    }
+
+    .halim-rating-score {
+        font-size: 16px
+    }
+
+    .halim-rating-votes {
+        font-size: 12px
+    }
+
+    .halim-rating-button {
+        font-size: 13px;
+        padding: 6px 15px;
+        margin-left: auto;
+    }
+    
+}
+
+@media (max-width: 400px) {
+    #halim-list-server ul li span {
+        padding: 6px;
+    }
+
+    .halim-star-rating,
+    .halim-rating-score {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 350px) {
+    .halim-rating-container {
+        padding: 6px;
+    }
+
+    .halim-rating-button {
+        font-size: 11px;
+        padding: 4px 6px;
+    }
+
+    .halim-star-icon {
+        margin-right: 2px;
+    }
+
+    #halim-list-server ul li span {
+        padding: 6px;
+    }
+}

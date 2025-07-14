@@ -57,7 +57,7 @@
             <div class="wpd-social-login-buttons">
             <?php do_action('wpdiscuz_social_login_buttons'); ?>
             </div>
-            <a id="custom-google-login" class="google-login-button" href="https://hswebfreelancer.info/wp-login.php?loginSocial=google" data-plugin="nsl" data-action="connect" data-redirect="current" data-provider="google" data-popupwidth="600" data-popupheight="600">
+            <a id="custom-google-login" class="google-login-button" href="<?php echo esc_url( site_url('/wp-login.php?loginSocial=google') ); ?>" data-plugin="nsl" data-action="connect" data-redirect="current" data-provider="google" data-popupwidth="600" data-popupheight="600">
                 <span class="google-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="LgbsSe-Bz112c" width="20px" height="20px">
                         <g>

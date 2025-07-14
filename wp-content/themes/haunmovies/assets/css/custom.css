@@ -217,6 +217,10 @@ body.halimthemes,
     color: #fff;
 }
 
+#footer #custom_html-2 {
+    width: 66%;
+}
+
 body *:not(i) {
 	font-family: 'Montserrat', sans-serif;
 }
@@ -242,6 +246,10 @@ body *:not(i) {
 
 #header .notice-pc {
 	color: #ccc;
+}
+
+#header .site-title {
+    height: 60px;
 }
 
 /* Login modal */
@@ -452,6 +460,10 @@ body *:not(i) {
 		justify-content: center;
 		margin-top: 16px;
 	}
+
+    #main-contents {
+        padding: 0 5px !important;
+    }
 }
 
 .home .main-navigation .navbar-nav>.active>a,

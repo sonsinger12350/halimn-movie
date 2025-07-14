@@ -53,7 +53,7 @@ get_header();?>
 				$metaPost = get_post_meta($post_id, "_halimmovies", true);
     			$dataPlayer = json_decode(stripslashes($metaPost), true);
 
-				foreach ($dataPlayer[$server]["halimmovies_server_data"] as $key => $value) {
+				foreach ($dataPlayer[($server-1)]["halimmovies_server_data"] as $key => $value) {
 					if ($value['halimmovies_ep_slug'] == $episode) {
 						$episodeTitle = $value['halimmovies_ep_name'];
 						break;

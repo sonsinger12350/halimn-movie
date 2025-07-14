@@ -280,7 +280,7 @@ add_action('wp_ajax_halim_upload_avatar', function() {
 	$file = $_FILES['custom_avatar'];
 	$user_id = get_current_user_id();
 
-    if ($file['size'] > 1048576) wp_send_json_error(['message' => 'Ảnh không được lớn hơn 1MB']);
+    if ($file['size'] > 512000) wp_send_json_error(['message' => 'Ảnh không được lớn hơn 500KB']);
 
 	require_once ABSPATH . 'wp-admin/includes/file.php';
 	require_once ABSPATH . 'wp-admin/includes/image.php';
