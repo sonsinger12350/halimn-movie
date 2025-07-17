@@ -5,7 +5,7 @@
 */
 get_header();?>
 
-<link rel="stylesheet" href="<?= get_stylesheet_directory_uri() ?>/assets/css/page-recent-viewed.css"/>
+<link rel="stylesheet" href="<?= get_template_directory_uri() ?>/assets/css/page-recent-viewed.css"/>
 
 <main id="main-contents" class="col-xs-12 col-sm-12 col-md-8">
 	<?php if ( is_active_sidebar( 'halim-ad-above-category' ) ) { ?>

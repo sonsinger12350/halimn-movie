@@ -56,23 +56,23 @@
 	else $trailer_url = '';
 	$ratingIcon = [
 		'5' => [
-			'image' => get_stylesheet_directory_uri().'/assets/images/rate-5.webp',
+			'image' => get_template_directory_uri().'/assets/images/rate-5.webp',
 			'text' => 'Đỉnh nóc'
 		],
 		'4' => [
-			'image' => get_stylesheet_directory_uri().'/assets/images/rate-4.webp',
+			'image' => get_template_directory_uri().'/assets/images/rate-4.webp',
 			'text' => 'Hay ho'
 		],
 		'3' => [
-			'image' => get_stylesheet_directory_uri().'/assets/images/rate-3.webp',
+			'image' => get_template_directory_uri().'/assets/images/rate-3.webp',
 			'text' => 'Tạm ổn'
 		],
 		'2' => [
-			'image' => get_stylesheet_directory_uri().'/assets/images/rate-2.webp',
+			'image' => get_template_directory_uri().'/assets/images/rate-2.webp',
 			'text' => 'Nhạt nhòa'
 		],
 		'1' => [
-			'image' => get_stylesheet_directory_uri().'/assets/images/rate-1.webp',
+			'image' => get_template_directory_uri().'/assets/images/rate-1.webp',
 			'text' => 'Thảm họa'
 		]
 	];
@@ -80,7 +80,7 @@
 	$related_movie = get_post_meta($post->ID, '_custom_related_movie', true);
 ?>
 
-<link rel="stylesheet" href="<?= get_stylesheet_directory_uri() ?>/assets/css/movie-info.css?v=<?= time() ?>"/>
+<link rel="stylesheet" href="<?= get_template_directory_uri() ?>/assets/css/movie-info.css?v=<?= time() ?>"/>
 
 <!-- Modal rating -->
 <div class="movie-rating-modal-overlay" id="ratingModal">
@@ -115,7 +115,7 @@
 <div class="halim-movie-wrapper tpl-2 info-movie">
 	<div class="head ah-frame-bg">
 		<div class="first">
-			<img src="<?php echo halim_image_display('movie-thumb'); ?>" alt="<?= $the_title ?>">
+			<img src="<?php echo halim_image_display('medium'); ?>" alt="<?= $the_title ?>">
 		</div>
 		<div class="last">
 			<div class="name">
@@ -216,7 +216,7 @@
         <span class="list-episode-filter" id="list_episode_filter">
             <input id="keyword-ep" name="q" type="text" autocomplete="off" placeholder="Nhập số tập">
         </span>
-        <img id="loading-ep" style="display: none;" src="<?= get_stylesheet_directory_uri() ?>/assets/images/ajax-loader.gif">
+        <img id="loading-ep" style="display: none;" src="<?= get_template_directory_uri() ?>/assets/images/ajax-loader.gif">
         <div id="suggestions-ep" style="display: none;"></div>
     </div>
 	<div id="halim-list-server" class="list-eps-ajax">

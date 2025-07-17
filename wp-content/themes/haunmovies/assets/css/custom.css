@@ -252,6 +252,12 @@ body *:not(i) {
     height: 60px;
 }
 
+@media (max-width: 767px) {
+	#footer #custom_html-2 {
+		width: 100%;
+	}
+}
+
 /* Login modal */
 #custom-login-modal {
     visibility: hidden;
@@ -558,6 +564,10 @@ body *:not(i) {
 /* End of Movie item */
 
 /* Pagination */
+.page-numbers li {
+    margin-right: 5px;
+}
+
 .page-numbers li a,
 .page-numbers li span:not(.dots) {
 	background: #333;
@@ -837,6 +847,7 @@ body *:not(i) {
     top: 10px;
     transform: translateX(-50%);
     width: auto;
+    min-width: 300px;
     z-index: 999999
 }
 

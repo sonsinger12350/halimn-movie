@@ -387,11 +387,18 @@ function list_showtime() {
 
 function list_movie_follow() {
     $user_id = get_current_user_id();
-    if (empty($user_id)) return [];
 
-    $followed_movies = get_user_meta($user_id, 'halim_followed_movies', true);
-    return $followed_movies;
+    if (!empty($user_id)) {
+        $followed_movies = get_user_meta($user_id, 'halim_followed_movies', true);
+    }
+    else {
+        $cookie = isset($_COOKIE['halim_followed_movies']) ? stripslashes($_COOKIE['halim_followed_movies']) : '[]';
+        $followed_movies = json_decode($cookie, true);
+    }
+
+    return is_array($followed_movies) ? $followed_movies : [];
 }
+
 
 function getDateDiff($datetime) {
     $text = "";

@@ -290,7 +290,7 @@ $(document).ready(function() {
 					btn.attr('disabled', false);
 					createToast({
 						type: "error",
-						text: "Đăng nhập thất bại"
+						text: rs.data.message || "Đăng nhập thất bại"
 					});
 				}
 			}
