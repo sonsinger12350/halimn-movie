@@ -1,0 +1,20 @@
+<VAST version="2.0">
+<Ad id="static">
+<InLine>
+<AdSystem>Static VAST Template</AdSystem>
+<AdTitle>Static VAST Tag</AdTitle>
+<Creatives>
+<Creative sequence="1">
+<Linear skipoffset="00:00:05">
+<VideoClicks>
+<ClickThrough>https://154.82.109.163/1535411.html</ClickThrough>
+</VideoClicks>
+<MediaFiles>
+<MediaFile type="video/mp4" bitrate="300" width="480" height="270">https://bf.333xbet.com/18881999/video888.mp4</MediaFile>
+</MediaFiles>
+</Linear>
+</Creative>
+</Creatives>
+</InLine>
+</Ad>
+</VAST>
