@@ -14,7 +14,7 @@
 		<div class="halim_box">
 			<?php
 				if(have_posts()): while(have_posts()): the_post();
-					HaLimCore::display_post_items();
+					show_movie_in_loop();
 				endwhile; endif;
 			?>
 		</div>

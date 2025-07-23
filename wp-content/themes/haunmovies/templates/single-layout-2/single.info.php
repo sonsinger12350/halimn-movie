@@ -115,7 +115,7 @@
 <div class="halim-movie-wrapper tpl-2 info-movie">
 	<div class="head ah-frame-bg">
 		<div class="first">
-			<img src="<?php echo halim_image_display('medium'); ?>" alt="<?= $the_title ?>">
+			<img src="<?php echo halim_image_display(getDefaultImageSize()); ?>" alt="<?= $the_title ?>">
 		</div>
 		<div class="last">
 			<div class="name">

@@ -49,7 +49,7 @@ get_header();?>
 				$org_title = isset($meta['halim_original_title']) ? $meta['halim_original_title'] : '';
 				$post_slug = cs_get_option("halim_watch_url") . '-' . basename(get_permalink($post_id));
 				$watch_link = home_url("/") . "$post_slug/$episode-sv$server.html";
-				$image_url = get_the_post_thumbnail_url( $post_id, 'thumbnail' );
+				$image_url = get_the_post_thumbnail_url( $post_id, 'medium' );
 				$metaPost = get_post_meta($post_id, "_halimmovies", true);
     			$dataPlayer = json_decode(stripslashes($metaPost), true);
 

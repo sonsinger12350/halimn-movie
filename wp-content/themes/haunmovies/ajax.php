@@ -168,7 +168,7 @@ function handle_halim_get_showtime() {
 
     $content = '';
     if ($query->have_posts()) : while ($query->have_posts()) : $query->the_post();
-        $content .= HaLimCore::display_post_items();
+        $content .= show_movie_in_loop();
     endwhile; wp_reset_postdata(); endif;
 
     exit;

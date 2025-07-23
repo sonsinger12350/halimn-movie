@@ -61,7 +61,7 @@
 				$wp_query = new WP_Query( $args );
 				if ($wp_query->have_posts()) : while ($wp_query->have_posts()) : $wp_query->the_post();
 					if(HALIMHelper::is_type('tv_series')){
-						HaLimCore::display_post_items();
+						show_movie_in_loop();
 					}
 				endwhile; wp_reset_postdata(); endif; ?>
 			</div>

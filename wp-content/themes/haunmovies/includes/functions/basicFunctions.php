@@ -536,4 +536,36 @@ function show_showtime_movies($day) {
 
     return $content;
 }
+
+// Get the default image size. Ex: full, large, medium, thumbnail.
+function getDefaultImageSize() {
+    return 'large';
+}
+
+// Create a function to show movie in a loop by the_post() function
+function show_movie_in_loop() {
+    global $post;
+
+    $post_id = $post->ID;
+    $meta = get_post_meta($post_id, '_halim_metabox_options', true);
+    $title = get_the_title($post_id);
+    $thumbnail_url = get_the_post_thumbnail_url($post_id, getDefaultImageSize());
+
+    ?>
+    <article class="col-md-3 col-sm-3 col-xs-6 thumb grid-item post-<?= esc_attr($post_id); ?>">
+        <div class="halim-item">
+            <a class="halim-thumb" href="<?= esc_url(get_permalink()); ?>" title="<?= esc_attr($title); ?>">
+                <figure><img class="blur-up img-responsive lazyautosizes lazyloaded" data-sizes="auto" data-src="<?= esc_url($thumbnail_url); ?>" alt="<?= esc_attr($title); ?>" title="<?= esc_attr($title); ?>" src="<?= esc_url($thumbnail_url); ?>"></figure>
+                <span class="episode"><?= esc_html($meta['halim_episode'] ?? ''); ?></span>
+                <div class="halim-post-title-box">
+                    <div class="halim-post-title ">
+                        <h2 class="entry-title"><?= esc_html($title); ?></h2>
+                        <p class="original_title"><?= esc_html($meta['halim_original_title'] ?? ''); ?></p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </article>
+    <?php
+}
 ?>

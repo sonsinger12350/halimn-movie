@@ -87,7 +87,7 @@ class HaLim_Carousel_Slider_Widget extends WP_Widget {
 								<a class="halim-thumb" href="<?= $post->guid ?>" title="<?= $post_title ?>">
 									<figure class="<?= $number % 2 == 0 ? 'clip-path-even' : 'clip-path-odd' ?>">
 										<div class="halim-trending-poster-mask halim-trending-clip-path-odd"></div>
-										<img class="lazyload blur-up img-responsive" data-sizes="auto" data-src="<?= get_the_post_thumbnail_url( $post->ID, 'medium' ); ?>" alt="<?= $post_title ?>" title="<?= $post_title ?>">
+										<img class="lazyload blur-up img-responsive" data-sizes="auto" data-src="<?= get_the_post_thumbnail_url( $post->ID, getDefaultImageSize() ); ?>" alt="<?= $post_title ?>" title="<?= $post_title ?>">
 										<span class="episode"><?= $rating ?></span>
 									</figure>
 									<div class="halim-post-title-box">

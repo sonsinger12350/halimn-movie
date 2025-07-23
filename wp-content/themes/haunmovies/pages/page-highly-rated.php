@@ -58,7 +58,7 @@ get_header();?>
 							<div class="halim-item">
 								<a class="halim-thumb" href="<?= $post->guid ?>" title="<?= $post_title ?>">
 									<figure>
-										<img class="lazyload blur-up img-responsive" data-sizes="auto" data-src="<?= get_the_post_thumbnail_url( $post->ID, 'medium' ); ?>" alt="<?= $post_title ?>" title="<?= $post_title ?>">
+										<img class="lazyload blur-up img-responsive" data-sizes="auto" data-src="<?= get_the_post_thumbnail_url( $post->ID, getDefaultImageSize() ); ?>" alt="<?= $post_title ?>" title="<?= $post_title ?>">
 										<div class="rating-container">
 											<span class="rating-score"><?= $rating ?></span>
 											<span class="rating-star">⭐</span>

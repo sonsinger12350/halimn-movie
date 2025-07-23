@@ -141,7 +141,7 @@ class HaLim_Advanced_Widget extends WP_Widget {
 				}
 				$query = new WP_Query( $args );
 				if ($query->have_posts()) : while ($query->have_posts()) : $query->the_post();
-					HaLimCore::display_post_items($layout);
+					show_movie_in_loop();
 				endwhile; wp_reset_postdata();
 				endif;
 			?>
