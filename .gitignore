@@ -1,4 +1,7 @@
 /wp-content/ai1wm-backups
 /wp-content/film-cache
+/wp-content/litespeed
 
 wp-config.php
+robots.txt
+.htaccess
