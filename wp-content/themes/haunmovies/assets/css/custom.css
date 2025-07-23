@@ -217,7 +217,8 @@ body.halimthemes,
     color: #fff;
 }
 
-#footer #custom_html-2 {
+#footer #custom_html-2,
+#footer .widget_custom_html  {
     width: 66%;
 }
 
@@ -253,7 +254,8 @@ body *:not(i) {
 }
 
 @media (max-width: 767px) {
-	#footer #custom_html-2 {
+	#footer #custom_html-2,
+    #footer .widget_custom_html  {
 		width: 100%;
 	}
 }
